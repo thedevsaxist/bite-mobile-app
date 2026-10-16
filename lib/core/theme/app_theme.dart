@@ -127,10 +127,54 @@ abstract final class AppTheme {
         trackColor: WidgetStateProperty.resolveWith(
           (states) => states.contains(WidgetState.selected)
               ? AppColors.primary
-              : AppColors.inputBorder,
+              : AppColors.inactive,
         ),
         thumbColor: const WidgetStatePropertyAll(Colors.white),
         trackOutlineColor: const WidgetStatePropertyAll(Colors.transparent),
+      ),
+      // Android bottom navigation (Material 3).
+      navigationBarTheme: NavigationBarThemeData(
+        backgroundColor: AppColors.navBar,
+        indicatorColor: AppColors.navIndicator,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: WidgetStateProperty.resolveWith(
+          (states) => IconThemeData(
+            color: states.contains(WidgetState.selected)
+                ? AppColors.onNavIndicator
+                : AppColors.textSecondary,
+          ),
+        ),
+        labelTextStyle: WidgetStateProperty.resolveWith(
+          (states) => textTheme.labelSmall?.copyWith(
+            color: states.contains(WidgetState.selected)
+                ? AppColors.textPrimary
+                : AppColors.textSecondary,
+            fontWeight: states.contains(WidgetState.selected)
+                ? FontWeight.w700
+                : FontWeight.w600,
+          ),
+        ),
+      ),
+      // Android segmented control (History period).
+      segmentedButtonTheme: SegmentedButtonThemeData(
+        style: SegmentedButton.styleFrom(
+          selectedBackgroundColor: AppColors.navIndicator,
+          selectedForegroundColor: AppColors.onNavIndicator,
+          foregroundColor: AppColors.textPrimary,
+          side: const BorderSide(color: AppColors.textPlaceholder),
+          textStyle: textTheme.labelMedium,
+        ),
+      ),
+      bottomSheetTheme: const BottomSheetThemeData(
+        backgroundColor: AppColors.background,
+        surfaceTintColor: Colors.transparent,
+        showDragHandle: true,
+        dragHandleColor: AppColors.inputBorder,
+        dragHandleSize: Size(40, 5),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+        ),
       ),
     );
   }

@@ -55,6 +55,7 @@ dependencies:
   connectivity_plus: ^7.3.2
   cached_network_image: ^4.0.4
   material_ui: ^1.7.0
+  uicons: ^1.0.1
 
 dev_dependencies:
   flutter_test:

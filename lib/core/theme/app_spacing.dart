@@ -28,4 +28,8 @@ abstract final class AppSizes {
   static const buttonHeight = 56.0;
   static const inputHeight = 52.0;
   static const minTouchTarget = 44.0;
+
+  /// Bottom padding for tab pages on iOS so content scrolls clear of the
+  /// floating tab bar.
+  static const floatingTabBarClearance = 112.0;
 }

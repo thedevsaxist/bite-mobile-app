@@ -3,40 +3,41 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'package:calorie_estimator/core/theme/app_colors.dart';
 
-/// Manrope type scale from the design.
+/// Type scale from the design.
+///
+/// The design uses SF Pro Rounded, which can't be shipped on Android, so the
+/// app uses Nunito — the closest open rounded sans — on both platforms.
 abstract final class AppTextStyles {
   static const _primary = AppColors.textPrimary;
   static const _secondary = AppColors.textSecondary;
 
-  static TextTheme textTheme() => GoogleFonts.manropeTextTheme(
+  static TextTheme textTheme() => GoogleFonts.nunitoTextTheme(
     const TextTheme(
       // Large calorie totals, e.g. "860 kcal" on the result screen.
       displayMedium: TextStyle(
         fontSize: 40,
         fontWeight: FontWeight.w800,
-        letterSpacing: -1,
-        height: 1.05,
+        height: 1.1,
         color: _primary,
       ),
       // Welcome headline.
       displaySmall: TextStyle(
         fontSize: 32,
         fontWeight: FontWeight.w800,
-        letterSpacing: -0.6,
-        height: 1.15,
+        height: 1.2,
         color: _primary,
       ),
       // Screen titles.
       headlineMedium: TextStyle(
         fontSize: 28,
         fontWeight: FontWeight.w800,
-        letterSpacing: -0.5,
+        height: 1.2,
         color: _primary,
       ),
       headlineSmall: TextStyle(
         fontSize: 24,
         fontWeight: FontWeight.w800,
-        letterSpacing: -0.4,
+        height: 1.2,
         color: _primary,
       ),
       // Section headers, e.g. "Today's meals".
@@ -55,9 +56,9 @@ abstract final class AppTextStyles {
         fontWeight: FontWeight.w700,
         color: _primary,
       ),
-      bodyLarge: TextStyle(fontSize: 16, height: 1.5, color: _primary),
-      bodyMedium: TextStyle(fontSize: 15, height: 1.5, color: _primary),
-      bodySmall: TextStyle(fontSize: 13, height: 1.5, color: _secondary),
+      bodyLarge: TextStyle(fontSize: 16, height: 1.4, color: _primary),
+      bodyMedium: TextStyle(fontSize: 15, height: 1.4, color: _primary),
+      bodySmall: TextStyle(fontSize: 13, height: 1.4, color: _secondary),
       labelLarge: TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.w700,

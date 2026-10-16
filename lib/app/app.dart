@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -16,6 +17,10 @@ class App extends ConsumerWidget {
       themeMode: ThemeMode.light,
       routerConfig: ref.watch(appRouterProvider),
       debugShowCheckedModeBanner: false,
+      // Dark status bar icons by default; dark screens (camera, result)
+      // override this with their own AnnotatedRegion.
+      builder: (context, child) =>
+          AnnotatedRegion(value: SystemUiOverlayStyle.dark, child: child!),
     );
   }
 }

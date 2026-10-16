@@ -1,6 +1,8 @@
 abstract final class AppConstants {
-  // TODO: replace once the app name is decided in the design.
-  static const appName = 'Calorie Estimator';
+  static const appName = 'Scoop';
+
+  // TODO: read from package_info_plus once release builds are versioned.
+  static const appVersionLabel = 'Version 1.0.0 (Build 1)';
 
   static const minPasswordLength = 8;
 

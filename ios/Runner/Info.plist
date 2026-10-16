@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Calorie Estimator</string>
+	<string>Scoop</string>
 	<key>NSCameraUsageDescription</key>
 	<string>The camera is used to take photos of your meals so they can be analysed for calories.</string>
 	<key>NSPhotoLibraryUsageDescription</key>

@@ -1,8 +1,8 @@
-# Calorie Estimator (final-year project)
+# Scoop — calorie estimator (final-year project)
 
-Flutter app that recognises food in a photo and estimates calories. Source of truth for requirements: the project report (Chapter 3). Source of truth for UI: the Claude Design canvas at https://claude.ai/artifact/QgbSShJHY5fPfmmKzLDUi4 (12 screens: Welcome, Auth, Profile setup, Home, Capture, Meal details, Analysing, Result, Edit item, Couldn't analyse, History, Profile & settings).
+Flutter app that recognises food in a photo and estimates calories. Source of truth for requirements: the project report (Chapter 3). Source of truth for UI: the Claude Design canvas at https://claude.ai/artifact/QgbSShJHY5fPfmmKzLDUi4 (16 artboards: Welcome, Log in, Onboarding, Create account, Profile setup, Home iOS/Android, Capture, Meal details, Analysing, Result, Edit item, Couldn't analyse, History iOS/Android, Profile & settings). Re-read the relevant artboard before changing a screen — the design is still being edited.
 
-The app is being built **one feature at a time**. Backend does not exist yet; build frontend against repository interfaces.
+The app is being built **one feature at a time**. Backend does not exist yet. All screens exist as UI; view-model actions are empty methods with `// TODO:` notes (some return sample data or simulate progress) until data/domain layers are wired.
 
 ## Stack
 
@@ -11,13 +11,16 @@ The app is being built **one feature at a time**. Backend does not exist yet; bu
 - Navigation: go_router (`lib/app/router`)
 - Errors: `fpdart` `Either<Failure, T>` (`FutureEither<T>`)
 - UI: `package:material_ui/material_ui.dart` — **not** `package:flutter/material.dart` (Material moved out of the SDK in this Flutter version; mixing the two breaks theme types)
+- Icons: UIcons (Flaticon) only — always via `AppIcons` in `core/theme/app_icons.dart` (const `IconData` copied from the `uicons_*` fonts: regular rounded, solid rounded for selected states, brands). Never `Icons.*`.
+- Font: Nunito via google_fonts (stand-in for the design's SF Pro Rounded, which can't ship on Android).
+- Platform variants: Home and History differ on iOS (floating glass tab bar, `app/shell/main_shell.dart`) vs Android (Material 3 `NavigationBar`, scan button in page headers). Use `isCupertinoPlatform(context)` from `core/utils/platform.dart`.
 
 ## Architecture: feature-first, clean architecture, MVVM
 
 ```
 lib/
   main.dart              # bootstraps prefs, ProviderScope
-  app/                   # composition root: App widget, router (may import features)
+  app/                   # composition root: App widget, router, tab shell (may import features)
   core/                  # feature-agnostic; must never import from features/
     config/ constants/ error/ network/ storage/ theme/ usecase/ utils/ widgets/
   features/<feature>/

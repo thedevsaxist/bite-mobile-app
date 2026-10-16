@@ -1,0 +1,153 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:material_ui/material_ui.dart';
+
+import 'package:calorie_estimator/app/router/app_routes.dart';
+import 'package:calorie_estimator/core/theme/app_colors.dart';
+import 'package:calorie_estimator/core/theme/app_spacing.dart';
+import 'package:calorie_estimator/core/widgets/app_buttons.dart';
+import 'package:calorie_estimator/core/widgets/app_icon_button.dart';
+import 'package:calorie_estimator/core/widgets/section_label.dart';
+import 'package:calorie_estimator/features/food_analysis/presentation/view_models/capture_view_model.dart';
+import 'package:calorie_estimator/core/theme/app_icons.dart';
+
+/// 10 Couldn't analyse — shown when the photo can't be read.
+class AnalysisErrorView extends ConsumerWidget {
+  const AnalysisErrorView({super.key});
+
+  static const _tips = [
+    'Use good light, no flash glare',
+    'Hold the phone above the plate',
+    'Keep the whole plate in view',
+  ];
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final textTheme = Theme.of(context).textTheme;
+
+    void close() => context.go(AppRoutes.home);
+
+    return Scaffold(
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(
+            AppSpacing.xl,
+            AppSpacing.xs,
+            AppSpacing.xl,
+            AppSpacing.lg,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            spacing: AppSpacing.xl,
+            children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: AppIconButton.close(onPressed: close),
+              ),
+              Expanded(
+                child: Center(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      spacing: AppSpacing.lg,
+                      children: [
+                        Container(
+                          width: 96,
+                          height: 96,
+                          decoration: const BoxDecoration(
+                            color: AppColors.warningContainer,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            AppIcons.photoError,
+                            size: 44,
+                            color: AppColors.warning,
+                          ),
+                        ),
+                        Column(
+                          spacing: AppSpacing.xs,
+                          children: [
+                            Text(
+                              "We couldn't read this photo",
+                              textAlign: TextAlign.center,
+                              style: textTheme.headlineSmall,
+                            ),
+                            Text(
+                              'The image is too blurry, too dark, or the food '
+                              "isn't clear enough to recognise.",
+                              textAlign: TextAlign.center,
+                              style: textTheme.bodyMedium?.copyWith(
+                                color: AppColors.textSecondary,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(AppSpacing.md),
+                          decoration: BoxDecoration(
+                            color: AppColors.backgroundMuted,
+                            borderRadius: BorderRadius.circular(18),
+                            border: Border.all(color: AppColors.border),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            spacing: AppSpacing.sm,
+                            children: [
+                              const SectionLabel('Try this'),
+                              for (final (i, tip) in _tips.indexed)
+                                Row(
+                                  spacing: 10,
+                                  children: [
+                                    Text(
+                                      '${i + 1}.',
+                                      style: textTheme.bodyMedium?.copyWith(
+                                        fontWeight: FontWeight.w600,
+                                        color: AppColors.primary,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        tip,
+                                        style: textTheme.bodyMedium?.copyWith(
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                spacing: AppSpacing.xxs,
+                children: [
+                  PrimaryButton(
+                    label: 'Retake photo',
+                    onPressed: () => context.pushReplacement(AppRoutes.capture),
+                  ),
+                  TertiaryButton(
+                    label: 'Choose another photo',
+                    onPressed: () async {
+                      final picked = await ref
+                          .read(captureViewModelProvider.notifier)
+                          .pickFromGallery();
+                      if (picked && context.mounted) {
+                        context.pushReplacement(AppRoutes.mealDetails);
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
