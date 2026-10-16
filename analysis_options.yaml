@@ -1,0 +1,24 @@
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - build/**
+    - android/**
+    - ios/**
+  errors:
+    invalid_annotation_target: ignore
+
+plugins:
+  riverpod_lint: ^3.1.9
+
+linter:
+  rules:
+    always_use_package_imports: true
+    prefer_single_quotes: true
+    prefer_const_constructors: true
+    prefer_final_locals: true
+    sort_child_properties_last: true
+    use_super_parameters: true
+    unawaited_futures: true
