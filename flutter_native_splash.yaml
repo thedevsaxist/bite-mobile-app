@@ -1,0 +1,11 @@
+# Native launch screens from the bite brand (design artboards B3, B4).
+# Regenerate with: dart run flutter_native_splash:create
+# Images are sized for 4x density.
+flutter_native_splash:
+  color: "#121212"
+  image: assets/brand/splash_mark.png
+  branding_ios: assets/brand/splash_wordmark.png
+  branding_bottom_padding_ios: 56
+  android_12:
+    color: "#121212"
+    image: assets/brand/splash_mark_android12.png

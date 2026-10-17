@@ -126,7 +126,7 @@ class _RingPainter extends CustomPainter {
         -math.pi / 2,
         math.pi * 2 * progress,
         false,
-        paint..color = AppColors.primary,
+        paint..color = AppColors.accent,
       );
     }
   }

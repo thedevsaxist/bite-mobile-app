@@ -132,6 +132,9 @@ class CreateAccountView extends ConsumerWidget {
                   children: [
                     PrimaryButton(
                       label: isSignUp ? 'Continue' : 'Log in',
+                      loadingLabel: isSignUp
+                          ? 'Creating your account'
+                          : 'Logging in',
                       isLoading: state.isSubmitting,
                       onPressed: submit,
                     ),

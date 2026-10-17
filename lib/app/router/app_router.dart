@@ -14,6 +14,7 @@ import 'package:calorie_estimator/features/food_analysis/presentation/views/resu
 import 'package:calorie_estimator/features/history/presentation/views/history_view.dart';
 import 'package:calorie_estimator/features/home/presentation/views/home_view.dart';
 import 'package:calorie_estimator/features/onboarding/presentation/views/onboarding_view.dart';
+import 'package:calorie_estimator/features/onboarding/presentation/views/splash_view.dart';
 import 'package:calorie_estimator/features/onboarding/presentation/views/welcome_view.dart';
 import 'package:calorie_estimator/features/profile/presentation/views/profile_setup_view.dart';
 import 'package:calorie_estimator/features/settings/presentation/views/settings_view.dart';
@@ -25,9 +26,14 @@ GoRouter appRouter(Ref ref) {
   // TODO: add a redirect once the auth feature exposes session state —
   // signed-in users skip Welcome, signed-out users can't reach the tabs.
   return GoRouter(
-    initialLocation: AppRoutes.welcome,
+    initialLocation: AppRoutes.splash,
     debugLogDiagnostics: kDebugMode,
     routes: [
+      GoRoute(
+        path: AppRoutes.splash,
+        builder: (context, state) => const SplashView(),
+      ),
+
       // Onboarding & auth
       GoRoute(
         path: AppRoutes.welcome,

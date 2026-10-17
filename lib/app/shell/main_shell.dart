@@ -151,7 +151,7 @@ class _GlassTabBar extends StatelessWidget {
                                     : tab.icon,
                                 size: 22,
                                 color: index == currentIndex
-                                    ? AppColors.primary
+                                    ? AppColors.accentText
                                     : AppColors.textPrimary,
                               ),
                               Text(
@@ -162,7 +162,7 @@ class _GlassTabBar extends StatelessWidget {
                                       ? FontWeight.w700
                                       : FontWeight.w600,
                                   color: index == currentIndex
-                                      ? AppColors.primary
+                                      ? AppColors.accentText
                                       : AppColors.textPrimary,
                                 ),
                               ),

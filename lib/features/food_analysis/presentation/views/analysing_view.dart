@@ -10,6 +10,7 @@ import 'package:calorie_estimator/core/widgets/plate_illustration.dart';
 import 'package:calorie_estimator/features/food_analysis/domain/entities/food_analysis.dart';
 import 'package:calorie_estimator/features/food_analysis/presentation/view_models/scan_session_view_model.dart';
 import 'package:calorie_estimator/core/theme/app_icons.dart';
+import 'package:calorie_estimator/core/widgets/app_loader.dart';
 
 /// 07 Analysing. Starts the analysis on open and moves on to the result or
 /// the "couldn't analyse" screen when it finishes.
@@ -236,11 +237,7 @@ class _StepRow extends StatelessWidget {
         ),
         child: const Icon(AppIcons.check, size: 16, color: Colors.white),
       ),
-      _StepStatus.active => const CircularProgressIndicator(
-        strokeWidth: 3,
-        color: AppColors.primary,
-        backgroundColor: AppColors.navIndicator,
-      ),
+      _StepStatus.active => const AppLoader(size: 28),
       _StepStatus.pending => Container(
         decoration: BoxDecoration(
           shape: BoxShape.circle,

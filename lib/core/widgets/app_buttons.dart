@@ -2,6 +2,7 @@ import 'package:material_ui/material_ui.dart';
 
 import 'package:calorie_estimator/core/theme/app_colors.dart';
 import 'package:calorie_estimator/core/theme/app_spacing.dart';
+import 'package:calorie_estimator/core/widgets/app_loader.dart';
 
 /// Full-width green call-to-action.
 class PrimaryButton extends StatelessWidget {
@@ -9,12 +10,17 @@ class PrimaryButton extends StatelessWidget {
     required this.label,
     required this.onPressed,
     this.isLoading = false,
+    this.loadingLabel,
     super.key,
   });
 
   final String label;
   final VoidCallback? onPressed;
   final bool isLoading;
+
+  /// Shown next to the loader while [isLoading], e.g. "Logging in".
+  /// Defaults to [label].
+  final String? loadingLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -27,12 +33,17 @@ class PrimaryButton extends StatelessWidget {
             )
           : null,
       child: isLoading
-          ? const SizedBox.square(
-              dimension: 22,
-              child: CircularProgressIndicator(
-                strokeWidth: 2.5,
-                color: Colors.white,
-              ),
+          ? Row(
+              mainAxisSize: MainAxisSize.min,
+              spacing: 10,
+              children: [
+                AppLoader(
+                  size: 20,
+                  ringColor: Colors.white,
+                  semanticLabel: loadingLabel ?? label,
+                ),
+                Text(loadingLabel ?? label),
+              ],
             )
           : Text(label),
     );

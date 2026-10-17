@@ -49,11 +49,6 @@ abstract final class AppIcons {
   ); // stats
 
   // Scan flow
-  static const logo = IconData(
-    0xeae9,
-    fontFamily: _regular,
-    fontPackage: _regular,
-  ); // expand
   static const camera = IconData(
     0xe9db,
     fontFamily: _regular,

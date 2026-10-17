@@ -48,14 +48,14 @@ class IconBadge extends StatelessWidget {
       width: size,
       height: size,
       decoration: BoxDecoration(
-        color: filled ? AppColors.primary : AppColors.primaryContainer,
+        color: filled ? AppColors.primary : AppColors.accentContainer,
         shape: circle ? BoxShape.circle : BoxShape.rectangle,
         borderRadius: circle ? null : BorderRadius.circular(12),
       ),
       child: Icon(
         icon,
         size: size / 2,
-        color: filled ? Colors.white : AppColors.primaryDark,
+        color: filled ? Colors.white : AppColors.onAccentContainer,
       ),
     );
   }

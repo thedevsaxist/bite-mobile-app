@@ -260,12 +260,14 @@ class _SaveStatusChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final foreground = saved ? AppColors.primaryDark : AppColors.warningDark;
+    final foreground = saved
+        ? AppColors.onAccentContainer
+        : AppColors.warningDark;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: saved ? AppColors.primaryContainer : AppColors.warningContainer,
+        color: saved ? AppColors.accentContainer : AppColors.warningContainer,
         borderRadius: BorderRadius.circular(AppRadii.pill),
       ),
       child: Row(

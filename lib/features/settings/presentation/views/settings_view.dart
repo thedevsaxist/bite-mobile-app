@@ -58,6 +58,7 @@ class SettingsView extends ConsumerWidget {
               child: AsyncValueView(
                 value: settings,
                 onRetry: () => ref.invalidate(settingsViewModelProvider),
+                loadingMessage: 'Loading your profile…',
                 data: (state) => ListView(
                   padding: const EdgeInsets.symmetric(
                     horizontal: AppSpacing.lg,
@@ -239,7 +240,7 @@ class _DetailRow extends StatelessWidget {
             value,
             style: textTheme.bodyMedium?.copyWith(
               fontWeight: highlight ? FontWeight.w800 : FontWeight.w700,
-              color: highlight ? AppColors.primaryDark : null,
+              color: highlight ? AppColors.onAccentContainer : null,
             ),
           ),
         ],
@@ -287,7 +288,7 @@ class _AutoSaveTile extends StatelessWidget {
             Switch.adaptive(
               value: enabled,
               onChanged: onChanged,
-              activeTrackColor: AppColors.primary,
+              activeTrackColor: AppColors.accent,
             ),
           ],
         ),

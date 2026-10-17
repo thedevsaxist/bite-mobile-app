@@ -200,6 +200,7 @@ class ProfileSetupView extends ConsumerWidget {
               _DailyReferenceCard(kcal: profile.estimatedDailyCalories),
               PrimaryButton(
                 label: isEditing ? 'Save changes' : 'Get started',
+                loadingLabel: 'Saving',
                 isLoading: state.isSaving,
                 onPressed: save,
               ),

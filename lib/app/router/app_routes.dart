@@ -1,5 +1,8 @@
 /// Route paths, one per screen in the design.
 abstract final class AppRoutes {
+  /// Start-up hand-off from the native launch screen.
+  static const splash = '/';
+
   // Onboarding & auth
   static const welcome = '/welcome';
   static const onboarding = '/onboarding';

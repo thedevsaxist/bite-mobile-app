@@ -181,7 +181,7 @@ class _PageHeading extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 10,
       children: [
-        SectionLabel(eyebrow, color: AppColors.primary),
+        SectionLabel(eyebrow, color: AppColors.accentText),
         Text(title, style: textTheme.headlineMedium),
         if (body case final body?)
           Text(
@@ -207,7 +207,7 @@ class _EstimateBadge extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppRadii.input),
         boxShadow: const [
           BoxShadow(
-            color: Color(0x4D1E7A4C),
+            color: Color(0x40141414),
             blurRadius: 20,
             offset: Offset(0, 8),
           ),

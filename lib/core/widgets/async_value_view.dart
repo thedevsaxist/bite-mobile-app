@@ -3,9 +3,10 @@ import 'package:material_ui/material_ui.dart';
 
 import 'package:calorie_estimator/core/error/failures.dart';
 import 'package:calorie_estimator/core/theme/app_spacing.dart';
+import 'package:calorie_estimator/core/widgets/app_loader.dart';
 
-/// Renders an [AsyncValue]: a spinner while loading the first time, an error
-/// message with a retry button, or [data].
+/// Renders an [AsyncValue]: the bite loader while loading the first time,
+/// an error message with a retry button, or [data].
 ///
 /// Data stays on screen while refreshing.
 class AsyncValueView<T> extends StatelessWidget {
@@ -13,12 +14,16 @@ class AsyncValueView<T> extends StatelessWidget {
     required this.value,
     required this.data,
     this.onRetry,
+    this.loadingMessage,
     super.key,
   });
 
   final AsyncValue<T> value;
   final Widget Function(T data) data;
   final VoidCallback? onRetry;
+
+  /// Shown under the loader, e.g. "Loading your meals…".
+  final String? loadingMessage;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +35,7 @@ class AsyncValueView<T> extends StatelessWidget {
             : const UnknownFailure().message,
         onRetry: onRetry,
       ),
-      _ => const Center(child: CircularProgressIndicator()),
+      _ => AppLoadingView(message: loadingMessage),
     };
   }
 }

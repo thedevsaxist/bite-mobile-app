@@ -17,13 +17,15 @@ class InitialsAvatar extends StatelessWidget {
       height: size,
       alignment: Alignment.center,
       decoration: const BoxDecoration(
-        color: AppColors.primaryContainer,
+        color: AppColors.accentContainer,
         shape: BoxShape.circle,
       ),
       child: Text(
         initialsOf(name),
-        style: Theme.of(context).textTheme.titleMedium
-            ?.copyWith(fontSize: size * 0.34, color: AppColors.primaryDark),
+        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+          fontSize: size * 0.34,
+          color: AppColors.onAccentContainer,
+        ),
       ),
     );
   }

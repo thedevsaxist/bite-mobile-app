@@ -192,7 +192,9 @@ class _RuleRow extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               style: textTheme.bodySmall?.copyWith(
                 fontWeight: met ? FontWeight.w700 : FontWeight.w600,
-                color: met ? AppColors.primaryDark : AppColors.textSecondary,
+                color: met
+                    ? AppColors.onAccentContainer
+                    : AppColors.textSecondary,
               ),
             ),
           ),

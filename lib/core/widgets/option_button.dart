@@ -30,11 +30,11 @@ class OptionButton extends StatelessWidget {
       selected: selected,
       button: true,
       child: Material(
-        color: selected ? AppColors.primaryContainer : AppColors.background,
+        color: selected ? AppColors.accentContainer : AppColors.background,
         shape: RoundedRectangleBorder(
           borderRadius: radius,
           side: selected
-              ? const BorderSide(color: AppColors.primary, width: 2)
+              ? const BorderSide(color: AppColors.accent, width: 2)
               : const BorderSide(color: AppColors.inputBorder),
         ),
         child: InkWell(
@@ -53,7 +53,7 @@ class OptionButton extends StatelessWidget {
                   style: textTheme.labelMedium?.copyWith(
                     fontWeight: selected ? FontWeight.w700 : FontWeight.w600,
                     color: selected
-                        ? AppColors.primaryDark
+                        ? AppColors.onAccentContainer
                         : AppColors.textPrimary,
                   ),
                 ),

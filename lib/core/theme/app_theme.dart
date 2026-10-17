@@ -13,9 +13,9 @@ abstract final class AppTheme {
     const colorScheme = ColorScheme.light(
       primary: AppColors.primary,
       onPrimary: Colors.white,
-      primaryContainer: AppColors.primaryContainer,
-      onPrimaryContainer: AppColors.primaryDark,
-      secondary: AppColors.primaryDark,
+      primaryContainer: AppColors.accentContainer,
+      onPrimaryContainer: AppColors.onAccentContainer,
+      secondary: AppColors.onAccentContainer,
       onSecondary: Colors.white,
       surface: AppColors.background,
       onSurface: AppColors.textPrimary,
@@ -77,7 +77,7 @@ abstract final class AppTheme {
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: AppColors.primary,
+          foregroundColor: AppColors.accentText,
           minimumSize: const Size(0, AppSizes.minTouchTarget),
           textStyle: textTheme.titleSmall,
         ),
@@ -114,7 +114,7 @@ abstract final class AppTheme {
         space: 1,
       ),
       progressIndicatorTheme: const ProgressIndicatorThemeData(
-        color: AppColors.primary,
+        color: AppColors.accent,
         linearTrackColor: AppColors.progressTrack,
         circularTrackColor: AppColors.progressTrack,
       ),
@@ -129,7 +129,7 @@ abstract final class AppTheme {
       switchTheme: SwitchThemeData(
         trackColor: WidgetStateProperty.resolveWith(
           (states) => states.contains(WidgetState.selected)
-              ? AppColors.primary
+              ? AppColors.accent
               : AppColors.inactive,
         ),
         thumbColor: const WidgetStatePropertyAll(Colors.white),

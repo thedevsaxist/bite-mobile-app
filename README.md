@@ -1,4 +1,4 @@
-# Calorie Estimator
+# Bite
 
 Final-year project: *The Design and Implementation of an AI-Based Food Recognition Application for Automated Calorie Estimation* — Chidiebube Praise Iroezindu, Department of Computer Science, University of Port Harcourt.
 

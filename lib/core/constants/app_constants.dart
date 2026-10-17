@@ -1,5 +1,9 @@
 abstract final class AppConstants {
-  static const appName = 'Scoop';
+  /// Used in sentences ("New to Bite?") and as the device display name.
+  static const appName = 'Bite';
+
+  /// The lowercase logo wordmark.
+  static const wordmark = 'bite';
 
   // TODO: read from package_info_plus once release builds are versioned.
   static const appVersionLabel = 'Version 1.0.0 (Build 1)';

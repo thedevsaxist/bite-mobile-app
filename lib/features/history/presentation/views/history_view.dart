@@ -93,6 +93,7 @@ class HistoryView extends ConsumerWidget {
               child: AsyncValueView(
                 value: history,
                 onRetry: () => ref.invalidate(historyViewModelProvider),
+                loadingMessage: 'Loading your meals…',
                 data: (state) => ListView(
                   padding: EdgeInsets.fromLTRB(
                     AppSpacing.lg,

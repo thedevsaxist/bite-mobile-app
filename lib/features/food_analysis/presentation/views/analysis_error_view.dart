@@ -102,7 +102,7 @@ class AnalysisErrorView extends ConsumerWidget {
                                       '${i + 1}.',
                                       style: textTheme.bodyMedium?.copyWith(
                                         fontWeight: FontWeight.w600,
-                                        color: AppColors.primary,
+                                        color: AppColors.accentText,
                                       ),
                                     ),
                                     Expanded(

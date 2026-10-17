@@ -25,8 +25,8 @@ class ScanMealButton extends StatelessWidget {
 
     final button = Material(
       color: floating
-          ? AppColors.primary.withValues(alpha: 0.88)
-          : AppColors.primary,
+          ? AppColors.accent.withValues(alpha: 0.88)
+          : AppColors.accent,
       shape: CircleBorder(
         side: floating
             ? BorderSide(color: Colors.white.withValues(alpha: 0.45))
@@ -56,7 +56,7 @@ class ScanMealButton extends StatelessWidget {
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: Color(0x591E7A4C),
+                    color: Color(0x59FF5A1F),
                     blurRadius: 30,
                     offset: Offset(0, 10),
                   ),

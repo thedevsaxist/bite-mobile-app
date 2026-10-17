@@ -5,8 +5,8 @@ import 'package:calorie_estimator/app/router/app_routes.dart';
 import 'package:calorie_estimator/core/theme/app_colors.dart';
 import 'package:calorie_estimator/core/theme/app_spacing.dart';
 import 'package:calorie_estimator/core/widgets/app_buttons.dart';
+import 'package:calorie_estimator/core/widgets/bite_mark.dart';
 import 'package:calorie_estimator/core/widgets/plate_illustration.dart';
-import 'package:calorie_estimator/features/onboarding/presentation/widgets/app_logo.dart';
 
 /// 01 Welcome.
 class WelcomeView extends StatelessWidget {
@@ -29,7 +29,7 @@ class WelcomeView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             spacing: AppSpacing.xl,
             children: [
-              const AppLogo(),
+              const Align(alignment: Alignment.centerLeft, child: BiteLogo()),
               const Expanded(child: _HeroIllustration()),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -141,7 +141,7 @@ class _FoodChip extends StatelessWidget {
           children: [
             TextSpan(
               text: '$kcal kcal',
-              style: const TextStyle(color: AppColors.primary),
+              style: const TextStyle(color: AppColors.accentText),
             ),
           ],
         ),

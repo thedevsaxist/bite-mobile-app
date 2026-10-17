@@ -114,6 +114,7 @@ class LoginView extends ConsumerWidget {
                   children: [
                     PrimaryButton(
                       label: 'Log in',
+                      loadingLabel: 'Logging in',
                       isLoading: state.isSubmitting,
                       onPressed: () {
                         TextInput.finishAutofillContext();

@@ -33,8 +33,10 @@ class HomeView extends ConsumerWidget {
         child: AsyncValueView(
           value: home,
           onRetry: () => ref.invalidate(homeViewModelProvider),
+          loadingMessage: 'Loading your day…',
           data: (state) => RefreshIndicator(
             onRefresh: ref.read(homeViewModelProvider.notifier).refresh,
+            color: AppColors.ink,
             child: ListView(
               padding: EdgeInsets.fromLTRB(
                 AppSpacing.lg,
