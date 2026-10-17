@@ -86,6 +86,22 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  # SF Pro Rounded (iOS). Subset to Latin + common symbols to keep the app
+  # small. Android uses Poppins via google_fonts instead.
+  fonts:
+    - family: SF Pro Rounded
+      fonts:
+        - asset: assets/fonts/sf_pro_rounded/SF-Pro-Rounded-Regular.otf
+          weight: 400
+        - asset: assets/fonts/sf_pro_rounded/SF-Pro-Rounded-Medium.otf
+          weight: 500
+        - asset: assets/fonts/sf_pro_rounded/SF-Pro-Rounded-Semibold.otf
+          weight: 600
+        - asset: assets/fonts/sf_pro_rounded/SF-Pro-Rounded-Bold.otf
+          weight: 700
+        - asset: assets/fonts/sf_pro_rounded/SF-Pro-Rounded-Heavy.otf
+          weight: 800
+
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

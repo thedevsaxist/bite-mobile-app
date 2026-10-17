@@ -12,7 +12,7 @@ The app is being built **one feature at a time**. Backend does not exist yet. Al
 - Errors: `fpdart` `Either<Failure, T>` (`FutureEither<T>`)
 - UI: `package:material_ui/material_ui.dart` — **not** `package:flutter/material.dart` (Material moved out of the SDK in this Flutter version; mixing the two breaks theme types)
 - Icons: UIcons (Flaticon) only — always via `AppIcons` in `core/theme/app_icons.dart` (const `IconData` copied from the `uicons_*` fonts: regular rounded, solid rounded for selected states, brands). Never `Icons.*`.
-- Font: Nunito via google_fonts (stand-in for the design's SF Pro Rounded, which can't ship on Android).
+- Fonts: SF Pro Rounded on iOS (bundled, subset to Latin, in `assets/fonts/sf_pro_rounded` — Apple's SF licence covers mock-ups only, so swap before any store release); Poppins on Android via google_fonts. Chosen in `AppTextStyles.textTheme(platform)`; the design's 0.01em tracking is applied there too.
 - Platform variants: Home and History differ on iOS (floating glass tab bar, `app/shell/main_shell.dart`) vs Android (Material 3 `NavigationBar`, scan button in page headers). Use `isCupertinoPlatform(context)` from `core/utils/platform.dart`.
 
 ## Architecture: feature-first, clean architecture, MVVM

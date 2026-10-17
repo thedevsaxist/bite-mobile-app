@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'package:calorie_estimator/core/theme/app_colors.dart';
@@ -6,7 +7,8 @@ import 'package:calorie_estimator/core/theme/app_text_styles.dart';
 
 abstract final class AppTheme {
   static ThemeData get light {
-    final textTheme = AppTextStyles.textTheme();
+    final platform = defaultTargetPlatform;
+    final textTheme = AppTextStyles.textTheme(platform);
 
     const colorScheme = ColorScheme.light(
       primary: AppColors.primary,
@@ -41,6 +43,7 @@ abstract final class AppTheme {
     return ThemeData(
       useMaterial3: true,
       colorScheme: colorScheme,
+      fontFamily: AppTextStyles.fontFamily(platform),
       textTheme: textTheme,
       scaffoldBackgroundColor: AppColors.background,
       splashFactory: InkSparkle.splashFactory,
