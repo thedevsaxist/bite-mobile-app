@@ -8,15 +8,15 @@ part of 'capture_view_model.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// 05 Capture photo.
+/// 05 Capture photo. Owns the camera while the screen is open.
 
 @ProviderFor(CaptureViewModel)
 final captureViewModelProvider = CaptureViewModelProvider._();
 
-/// 05 Capture photo.
+/// 05 Capture photo. Owns the camera while the screen is open.
 final class CaptureViewModelProvider
     extends $NotifierProvider<CaptureViewModel, CaptureState> {
-  /// 05 Capture photo.
+  /// 05 Capture photo. Owns the camera while the screen is open.
   CaptureViewModelProvider._()
     : super(
         from: null,
@@ -44,9 +44,9 @@ final class CaptureViewModelProvider
   }
 }
 
-String _$captureViewModelHash() => r'bf144ce92e1e8ac5d264033320ffcc4e46bf73a1';
+String _$captureViewModelHash() => r'fa98acbb96bc91044b275e5e3630ac5800a5a49e';
 
-/// 05 Capture photo.
+/// 05 Capture photo. Owns the camera while the screen is open.
 
 abstract class _$CaptureViewModel extends $Notifier<CaptureState> {
   CaptureState build();

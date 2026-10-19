@@ -15,7 +15,8 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$MealDayGroup {
 
- String get label; int get totalCalories; List<MealRecord> get meals;
+ String get label;/// Disputed meals aren't counted, as in the summaries.
+ int get totalCalories; List<MealRecord> get meals;
 /// Create a copy of MealDayGroup
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -218,6 +219,7 @@ class _MealDayGroup implements MealDayGroup {
   
 
 @override final  String label;
+/// Disputed meals aren't counted, as in the summaries.
 @override final  int totalCalories;
  final  List<MealRecord> _meals;
 @override List<MealRecord> get meals {
@@ -291,7 +293,9 @@ as List<MealRecord>,
 /// @nodoc
 mixin _$HistoryState {
 
- HistoryPeriod get period; String get rangeLabel; int get dailyAverage; int get dailyReference; List<DailyIntake> get days; List<MealDayGroup> get groups;
+ HistoryPeriod get period; String get rangeLabel;/// Over the days with at least one meal.
+ int get dailyAverage;/// Today's reference; null without a profile.
+ int? get dailyReference; List<DailyIntake> get days; List<MealDayGroup> get groups;
 /// Create a copy of HistoryState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -327,7 +331,7 @@ abstract mixin class $HistoryStateCopyWith<$Res>  {
   factory $HistoryStateCopyWith(HistoryState value, $Res Function(HistoryState) _then) = _$HistoryStateCopyWithImpl;
 @useResult
 $Res call({
- HistoryPeriod period, String rangeLabel, int dailyAverage, int dailyReference, List<DailyIntake> days, List<MealDayGroup> groups
+ HistoryPeriod period, String rangeLabel, int dailyAverage, int? dailyReference, List<DailyIntake> days, List<MealDayGroup> groups
 });
 
 
@@ -344,13 +348,13 @@ class _$HistoryStateCopyWithImpl<$Res>
 
 /// Create a copy of HistoryState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? period = null,Object? rangeLabel = null,Object? dailyAverage = null,Object? dailyReference = null,Object? days = null,Object? groups = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? period = null,Object? rangeLabel = null,Object? dailyAverage = null,Object? dailyReference = freezed,Object? days = null,Object? groups = null,}) {
   return _then(HistoryState(
 period: null == period ? _self.period : period // ignore: cast_nullable_to_non_nullable
 as HistoryPeriod,rangeLabel: null == rangeLabel ? _self.rangeLabel : rangeLabel // ignore: cast_nullable_to_non_nullable
 as String,dailyAverage: null == dailyAverage ? _self.dailyAverage : dailyAverage // ignore: cast_nullable_to_non_nullable
-as int,dailyReference: null == dailyReference ? _self.dailyReference : dailyReference // ignore: cast_nullable_to_non_nullable
-as int,days: null == days ? _self.days : days // ignore: cast_nullable_to_non_nullable
+as int,dailyReference: freezed == dailyReference ? _self.dailyReference : dailyReference // ignore: cast_nullable_to_non_nullable
+as int?,days: null == days ? _self.days : days // ignore: cast_nullable_to_non_nullable
 as List<DailyIntake>,groups: null == groups ? _self.groups : groups // ignore: cast_nullable_to_non_nullable
 as List<MealDayGroup>,
   ));
@@ -437,7 +441,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( HistoryPeriod period,  String rangeLabel,  int dailyAverage,  int dailyReference,  List<DailyIntake> days,  List<MealDayGroup> groups)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( HistoryPeriod period,  String rangeLabel,  int dailyAverage,  int? dailyReference,  List<DailyIntake> days,  List<MealDayGroup> groups)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _HistoryState() when $default != null:
 return $default(_that.period,_that.rangeLabel,_that.dailyAverage,_that.dailyReference,_that.days,_that.groups);case _:
@@ -458,7 +462,7 @@ return $default(_that.period,_that.rangeLabel,_that.dailyAverage,_that.dailyRefe
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( HistoryPeriod period,  String rangeLabel,  int dailyAverage,  int dailyReference,  List<DailyIntake> days,  List<MealDayGroup> groups)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( HistoryPeriod period,  String rangeLabel,  int dailyAverage,  int? dailyReference,  List<DailyIntake> days,  List<MealDayGroup> groups)  $default,) {final _that = this;
 switch (_that) {
 case _HistoryState():
 return $default(_that.period,_that.rangeLabel,_that.dailyAverage,_that.dailyReference,_that.days,_that.groups);case _:
@@ -478,7 +482,7 @@ return $default(_that.period,_that.rangeLabel,_that.dailyAverage,_that.dailyRefe
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( HistoryPeriod period,  String rangeLabel,  int dailyAverage,  int dailyReference,  List<DailyIntake> days,  List<MealDayGroup> groups)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( HistoryPeriod period,  String rangeLabel,  int dailyAverage,  int? dailyReference,  List<DailyIntake> days,  List<MealDayGroup> groups)?  $default,) {final _that = this;
 switch (_that) {
 case _HistoryState() when $default != null:
 return $default(_that.period,_that.rangeLabel,_that.dailyAverage,_that.dailyReference,_that.days,_that.groups);case _:
@@ -493,13 +497,15 @@ return $default(_that.period,_that.rangeLabel,_that.dailyAverage,_that.dailyRefe
 
 
 class _HistoryState implements HistoryState {
-  const _HistoryState({required this.period, required this.rangeLabel, required this.dailyAverage, required this.dailyReference, required  List<DailyIntake> days, required  List<MealDayGroup> groups}): _days = days,_groups = groups;
+  const _HistoryState({required this.period, required this.rangeLabel, required this.dailyAverage, this.dailyReference, required  List<DailyIntake> days, required  List<MealDayGroup> groups}): _days = days,_groups = groups;
   
 
 @override final  HistoryPeriod period;
 @override final  String rangeLabel;
+/// Over the days with at least one meal.
 @override final  int dailyAverage;
-@override final  int dailyReference;
+/// Today's reference; null without a profile.
+@override final  int? dailyReference;
  final  List<DailyIntake> _days;
 @override List<DailyIntake> get days {
   if (_days is EqualUnmodifiableListView) return _days;
@@ -547,7 +553,7 @@ abstract mixin class _$HistoryStateCopyWith<$Res> implements $HistoryStateCopyWi
   factory _$HistoryStateCopyWith(_HistoryState value, $Res Function(_HistoryState) _then) = __$HistoryStateCopyWithImpl;
 @override @useResult
 $Res call({
- HistoryPeriod period, String rangeLabel, int dailyAverage, int dailyReference, List<DailyIntake> days, List<MealDayGroup> groups
+ HistoryPeriod period, String rangeLabel, int dailyAverage, int? dailyReference, List<DailyIntake> days, List<MealDayGroup> groups
 });
 
 
@@ -564,13 +570,13 @@ class __$HistoryStateCopyWithImpl<$Res>
 
 /// Create a copy of HistoryState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? period = null,Object? rangeLabel = null,Object? dailyAverage = null,Object? dailyReference = null,Object? days = null,Object? groups = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? period = null,Object? rangeLabel = null,Object? dailyAverage = null,Object? dailyReference = freezed,Object? days = null,Object? groups = null,}) {
   return _then(_HistoryState(
 period: null == period ? _self.period : period // ignore: cast_nullable_to_non_nullable
 as HistoryPeriod,rangeLabel: null == rangeLabel ? _self.rangeLabel : rangeLabel // ignore: cast_nullable_to_non_nullable
 as String,dailyAverage: null == dailyAverage ? _self.dailyAverage : dailyAverage // ignore: cast_nullable_to_non_nullable
-as int,dailyReference: null == dailyReference ? _self.dailyReference : dailyReference // ignore: cast_nullable_to_non_nullable
-as int,days: null == days ? _self._days : days // ignore: cast_nullable_to_non_nullable
+as int,dailyReference: freezed == dailyReference ? _self.dailyReference : dailyReference // ignore: cast_nullable_to_non_nullable
+as int?,days: null == days ? _self._days : days // ignore: cast_nullable_to_non_nullable
 as List<DailyIntake>,groups: null == groups ? _self._groups : groups // ignore: cast_nullable_to_non_nullable
 as List<MealDayGroup>,
   ));

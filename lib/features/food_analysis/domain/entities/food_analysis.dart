@@ -1,25 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'package:calorie_estimator/features/history/domain/entities/meal_record.dart';
+
 part 'food_analysis.freezed.dart';
-
-enum PortionUnit {
-  slices('slices', 'Slices', 1),
-  pieces('pieces', 'Pieces', 1),
-  servings('servings', 'Servings', 0.5),
-  cups('cups', 'Cups', 0.5),
-  grams('g', 'Grams', 10);
-
-  const PortionUnit(this.symbol, this.label, this.step);
-
-  /// Shown after the quantity, e.g. "6 slices", "150 g".
-  final String symbol;
-
-  /// Shown on the unit picker.
-  final String label;
-
-  /// How much the − / + buttons change the quantity by.
-  final double step;
-}
 
 /// Rough meal size the user can give before analysis (Meal details screen).
 enum MealPortion {
@@ -32,37 +15,37 @@ enum MealPortion {
   final String label;
 }
 
-/// One food the AI recognised in the photo (report §3.5.3, "Recognised Food
-/// Items"), with its estimated nutrition.
-@freezed
-abstract class RecognisedFoodItem with _$RecognisedFoodItem {
-  const factory RecognisedFoodItem({
-    required String id,
-    required String name,
-    required String portionDescription,
-    required double quantity,
-    required PortionUnit unit,
-    required int calories,
-    required int proteinGrams,
-    required int carbsGrams,
-    required int fatGrams,
-    @Default(false) bool wasModified,
-  }) = _RecognisedFoodItem;
+/// Backend error codes for a photo that can't be analysed, which send the
+/// user to the "Couldn't analyse" screen instead of showing an error.
+abstract final class UnreadablePhotoCodes {
+  static const all = {
+    'IMAGE_TOO_BLURRY',
+    'IMAGE_TOO_SMALL',
+    'IMAGE_TOO_LARGE',
+    'INVALID_IMAGE',
+    'UNSUPPORTED_IMAGE_TYPE',
+    'LIMIT_FILE_SIZE',
+    'NO_FOOD_DETECTED',
+    'AI_REFUSED',
+  };
 }
 
-/// The result of analysing one photo (report §3.5.3, "Food Analyses").
+/// The result of analysing one photo (report §3.5.3, "Food Analyses"),
+/// exactly as the AI produced it. Corrections go into the meal record.
 @freezed
 abstract class FoodAnalysis with _$FoodAnalysis {
   const factory FoodAnalysis({
     required String id,
-    required List<RecognisedFoodItem> items,
-  }) = _FoodAnalysis;
-  const FoodAnalysis._();
+    required List<MealItem> items,
+    required DateTime createdAt,
 
-  int get totalCalories => items.fold(0, (sum, i) => sum + i.calories);
-  int get totalProtein => items.fold(0, (sum, i) => sum + i.proteinGrams);
-  int get totalCarbs => items.fold(0, (sum, i) => sum + i.carbsGrams);
-  int get totalFat => items.fold(0, (sum, i) => sum + i.fatGrams);
+    /// A signed link to the stored photo.
+    String? imageUrl,
+
+    /// The meal saved from it: set straight away when auto-save is on.
+    String? mealId,
+    @Default(false) bool isDisputed,
+  }) = _FoodAnalysis;
 }
 
 /// Progress of an analysis request, shown on the Analysing screen.

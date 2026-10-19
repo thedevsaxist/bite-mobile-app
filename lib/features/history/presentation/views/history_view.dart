@@ -4,7 +4,7 @@ import 'package:material_ui/material_ui.dart';
 
 import 'package:calorie_estimator/app/router/app_routes.dart';
 import 'package:calorie_estimator/core/theme/app_colors.dart';
-import 'package:calorie_estimator/core/theme/app_icons.dart';
+import 'package:uicons/uicons.dart';
 import 'package:calorie_estimator/core/theme/app_spacing.dart';
 import 'package:calorie_estimator/core/utils/formatters.dart';
 import 'package:calorie_estimator/core/utils/platform.dart';
@@ -15,6 +15,7 @@ import 'package:calorie_estimator/core/widgets/scan_meal_button.dart';
 import 'package:calorie_estimator/features/food_analysis/presentation/view_models/scan_session_view_model.dart';
 import 'package:calorie_estimator/features/history/presentation/view_models/history_view_model.dart';
 import 'package:calorie_estimator/features/history/presentation/widgets/intake_chart_card.dart';
+import 'package:calorie_estimator/features/history/presentation/widgets/meal_subtitle.dart';
 
 /// 11 History. iOS uses a pill segmented control; Android a Material 3
 /// segmented button and a scan button in the header.
@@ -28,6 +29,12 @@ class HistoryView extends ConsumerWidget {
     final isIos = isCupertinoPlatform(context);
     final textTheme = Theme.of(context).textTheme;
     final period = history.value?.period ?? HistoryPeriod.week;
+
+    void openMeal(String id) {
+      // The result screen shows a loader until the meal arrives.
+      ref.read(scanSessionViewModelProvider.notifier).openSavedMeal(id);
+      context.push(AppRoutes.result);
+    }
 
     return Scaffold(
       backgroundColor: AppColors.backgroundMuted,
@@ -78,7 +85,7 @@ class HistoryView extends ConsumerWidget {
                       onChanged: viewModel.setPeriod,
                     )
                   : SegmentedButton<HistoryPeriod>(
-                      selectedIcon: const Icon(AppIcons.check, size: 16),
+                      selectedIcon: Icon(UIcons.regularRounded.check, size: 16),
                       segments: [
                         for (final p in HistoryPeriod.values)
                           ButtonSegment(value: p, label: Text(p.label)),
@@ -109,6 +116,22 @@ class HistoryView extends ConsumerWidget {
                       rangeLabel: state.rangeLabel,
                     ),
                     const SizedBox(height: AppSpacing.md),
+                    if (state.groups.isEmpty)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: AppSpacing.lg,
+                        ),
+                        child: Text(
+                          state.period == HistoryPeriod.day
+                              ? 'No meals yet today. Scan one to start your '
+                                    'history.'
+                              : 'No meals in this period yet.',
+                          textAlign: TextAlign.center,
+                          style: textTheme.bodyMedium?.copyWith(
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                      ),
                     for (final group in state.groups) ...[
                       _DayHeading(group: group),
                       for (final meal in group.meals)
@@ -116,18 +139,9 @@ class HistoryView extends ConsumerWidget {
                           padding: const EdgeInsets.only(top: AppSpacing.xs),
                           child: MealTile(
                             title: meal.title,
-                            subtitle:
-                                '${meal.mealType.label} · '
-                                '${formatTime(meal.eatenAt)}',
+                            subtitle: mealSubtitle(meal),
                             calories: meal.totalCalories,
-                            onTap: () async {
-                              await ref
-                                  .read(scanSessionViewModelProvider.notifier)
-                                  .openSavedMeal(meal.id);
-                              if (context.mounted) {
-                                await context.push(AppRoutes.result);
-                              }
-                            },
+                            onTap: () => openMeal(meal.id),
                           ),
                         ),
                       const SizedBox(height: AppSpacing.md),

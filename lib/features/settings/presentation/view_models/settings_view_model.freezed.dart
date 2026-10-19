@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SettingsState {
 
- AppUser get user; UserProfile? get profile; int? get dailyReference; bool get autoSaveResults;
+ AppUser get user; UserProfile? get profile; int? get dailyReference; bool get autoSaveResults; String? get errorMessage;
 /// Create a copy of SettingsState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -27,20 +27,20 @@ $SettingsStateCopyWith<SettingsState> get copyWith => _$SettingsStateCopyWithImp
 @override
 bool operator ==(Object other) {
   final _this = this as SettingsState;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SettingsState&&(identical(other.user, _this.user) || other.user == _this.user)&&(identical(other.profile, _this.profile) || other.profile == _this.profile)&&(identical(other.dailyReference, _this.dailyReference) || other.dailyReference == _this.dailyReference)&&(identical(other.autoSaveResults, _this.autoSaveResults) || other.autoSaveResults == _this.autoSaveResults));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SettingsState&&(identical(other.user, _this.user) || other.user == _this.user)&&(identical(other.profile, _this.profile) || other.profile == _this.profile)&&(identical(other.dailyReference, _this.dailyReference) || other.dailyReference == _this.dailyReference)&&(identical(other.autoSaveResults, _this.autoSaveResults) || other.autoSaveResults == _this.autoSaveResults)&&(identical(other.errorMessage, _this.errorMessage) || other.errorMessage == _this.errorMessage));
 }
 
 
 @override
 int get hashCode {
   final _this = this as SettingsState;
-  return Object.hash(runtimeType,_this.user,_this.profile,_this.dailyReference,_this.autoSaveResults);
+  return Object.hash(runtimeType,_this.user,_this.profile,_this.dailyReference,_this.autoSaveResults,_this.errorMessage);
 }
 
 @override
 String toString() {
   final _this = this as SettingsState;
-  return 'SettingsState(user: ${_this.user}, profile: ${_this.profile}, dailyReference: ${_this.dailyReference}, autoSaveResults: ${_this.autoSaveResults})';
+  return 'SettingsState(user: ${_this.user}, profile: ${_this.profile}, dailyReference: ${_this.dailyReference}, autoSaveResults: ${_this.autoSaveResults}, errorMessage: ${_this.errorMessage})';
 }
 
 
@@ -51,7 +51,7 @@ abstract mixin class $SettingsStateCopyWith<$Res>  {
   factory $SettingsStateCopyWith(SettingsState value, $Res Function(SettingsState) _then) = _$SettingsStateCopyWithImpl;
 @useResult
 $Res call({
- AppUser user, UserProfile? profile, int? dailyReference, bool autoSaveResults
+ AppUser user, UserProfile? profile, int? dailyReference, bool autoSaveResults, String? errorMessage
 });
 
 
@@ -68,13 +68,14 @@ class _$SettingsStateCopyWithImpl<$Res>
 
 /// Create a copy of SettingsState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? user = null,Object? profile = freezed,Object? dailyReference = freezed,Object? autoSaveResults = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? user = null,Object? profile = freezed,Object? dailyReference = freezed,Object? autoSaveResults = null,Object? errorMessage = freezed,}) {
   return _then(SettingsState(
 user: null == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
 as AppUser,profile: freezed == profile ? _self.profile : profile // ignore: cast_nullable_to_non_nullable
 as UserProfile?,dailyReference: freezed == dailyReference ? _self.dailyReference : dailyReference // ignore: cast_nullable_to_non_nullable
 as int?,autoSaveResults: null == autoSaveResults ? _self.autoSaveResults : autoSaveResults // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 /// Create a copy of SettingsState
@@ -180,10 +181,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( AppUser user,  UserProfile? profile,  int? dailyReference,  bool autoSaveResults)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( AppUser user,  UserProfile? profile,  int? dailyReference,  bool autoSaveResults,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _SettingsState() when $default != null:
-return $default(_that.user,_that.profile,_that.dailyReference,_that.autoSaveResults);case _:
+return $default(_that.user,_that.profile,_that.dailyReference,_that.autoSaveResults,_that.errorMessage);case _:
   return orElse();
 
 }
@@ -201,10 +202,10 @@ return $default(_that.user,_that.profile,_that.dailyReference,_that.autoSaveResu
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( AppUser user,  UserProfile? profile,  int? dailyReference,  bool autoSaveResults)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( AppUser user,  UserProfile? profile,  int? dailyReference,  bool autoSaveResults,  String? errorMessage)  $default,) {final _that = this;
 switch (_that) {
 case _SettingsState():
-return $default(_that.user,_that.profile,_that.dailyReference,_that.autoSaveResults);case _:
+return $default(_that.user,_that.profile,_that.dailyReference,_that.autoSaveResults,_that.errorMessage);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -221,10 +222,10 @@ return $default(_that.user,_that.profile,_that.dailyReference,_that.autoSaveResu
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( AppUser user,  UserProfile? profile,  int? dailyReference,  bool autoSaveResults)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( AppUser user,  UserProfile? profile,  int? dailyReference,  bool autoSaveResults,  String? errorMessage)?  $default,) {final _that = this;
 switch (_that) {
 case _SettingsState() when $default != null:
-return $default(_that.user,_that.profile,_that.dailyReference,_that.autoSaveResults);case _:
+return $default(_that.user,_that.profile,_that.dailyReference,_that.autoSaveResults,_that.errorMessage);case _:
   return null;
 
 }
@@ -236,13 +237,14 @@ return $default(_that.user,_that.profile,_that.dailyReference,_that.autoSaveResu
 
 
 class _SettingsState implements SettingsState {
-  const _SettingsState({required this.user, this.profile, this.dailyReference, this.autoSaveResults = true});
+  const _SettingsState({required this.user, this.profile, this.dailyReference, this.autoSaveResults = true, this.errorMessage});
   
 
 @override final  AppUser user;
 @override final  UserProfile? profile;
 @override final  int? dailyReference;
 @override@JsonKey() final  bool autoSaveResults;
+@override final  String? errorMessage;
 
 /// Create a copy of SettingsState
 /// with the given fields replaced by the non-null parameter values.
@@ -254,18 +256,18 @@ _$SettingsStateCopyWith<_SettingsState> get copyWith => __$SettingsStateCopyWith
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _SettingsState&&(identical(other.user, user) || other.user == user)&&(identical(other.profile, profile) || other.profile == profile)&&(identical(other.dailyReference, dailyReference) || other.dailyReference == dailyReference)&&(identical(other.autoSaveResults, autoSaveResults) || other.autoSaveResults == autoSaveResults));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _SettingsState&&(identical(other.user, user) || other.user == user)&&(identical(other.profile, profile) || other.profile == profile)&&(identical(other.dailyReference, dailyReference) || other.dailyReference == dailyReference)&&(identical(other.autoSaveResults, autoSaveResults) || other.autoSaveResults == autoSaveResults)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
 int get hashCode {
-    return Object.hash(runtimeType,user,profile,dailyReference,autoSaveResults);
+    return Object.hash(runtimeType,user,profile,dailyReference,autoSaveResults,errorMessage);
 }
 
 @override
 String toString() {
-    return 'SettingsState(user: $user, profile: $profile, dailyReference: $dailyReference, autoSaveResults: $autoSaveResults)';
+    return 'SettingsState(user: $user, profile: $profile, dailyReference: $dailyReference, autoSaveResults: $autoSaveResults, errorMessage: $errorMessage)';
 }
 
 
@@ -276,7 +278,7 @@ abstract mixin class _$SettingsStateCopyWith<$Res> implements $SettingsStateCopy
   factory _$SettingsStateCopyWith(_SettingsState value, $Res Function(_SettingsState) _then) = __$SettingsStateCopyWithImpl;
 @override @useResult
 $Res call({
- AppUser user, UserProfile? profile, int? dailyReference, bool autoSaveResults
+ AppUser user, UserProfile? profile, int? dailyReference, bool autoSaveResults, String? errorMessage
 });
 
 
@@ -293,13 +295,14 @@ class __$SettingsStateCopyWithImpl<$Res>
 
 /// Create a copy of SettingsState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? user = null,Object? profile = freezed,Object? dailyReference = freezed,Object? autoSaveResults = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? user = null,Object? profile = freezed,Object? dailyReference = freezed,Object? autoSaveResults = null,Object? errorMessage = freezed,}) {
   return _then(_SettingsState(
 user: null == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
 as AppUser,profile: freezed == profile ? _self.profile : profile // ignore: cast_nullable_to_non_nullable
 as UserProfile?,dailyReference: freezed == dailyReference ? _self.dailyReference : dailyReference // ignore: cast_nullable_to_non_nullable
 as int?,autoSaveResults: null == autoSaveResults ? _self.autoSaveResults : autoSaveResults // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

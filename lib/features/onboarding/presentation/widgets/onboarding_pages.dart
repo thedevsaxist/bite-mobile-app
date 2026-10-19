@@ -5,7 +5,7 @@ import 'package:calorie_estimator/core/theme/app_colors.dart';
 import 'package:calorie_estimator/core/theme/app_spacing.dart';
 import 'package:calorie_estimator/core/widgets/plate_illustration.dart';
 import 'package:calorie_estimator/core/widgets/section_label.dart';
-import 'package:calorie_estimator/core/theme/app_icons.dart';
+import 'package:uicons/uicons.dart';
 
 /// Page 1: what the app does.
 class WhatItDoesPage extends StatelessWidget {
@@ -51,12 +51,12 @@ class HowItWorksPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SingleChildScrollView(
+    return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         spacing: 28,
         children: [
-          _PageHeading(
+          const _PageHeading(
             eyebrow: 'How it works',
             title: 'Three steps, a few seconds',
             body:
@@ -67,18 +67,18 @@ class HowItWorksPage extends StatelessWidget {
             spacing: AppSpacing.sm,
             children: [
               _StepCard(
-                icon: AppIcons.camera,
+                icon: UIcons.regularRounded.camera,
                 title: '1. Snap your meal',
                 body: 'Take a photo or pick one from your gallery.',
                 highlighted: true,
               ),
               _StepCard(
-                icon: AppIcons.edit,
+                icon: UIcons.regularRounded.pencil,
                 title: '2. Add details (optional)',
                 body: 'Portion size or hidden ingredients help the estimate.',
               ),
               _StepCard(
-                icon: AppIcons.check,
+                icon: UIcons.regularRounded.check,
                 title: '3. Check and save',
                 body:
                     "See each food and its calories. Fix anything that's off.",
@@ -124,8 +124,8 @@ class WhyItHelpsPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     spacing: AppSpacing.xs,
                     children: [
-                      const Icon(
-                        AppIcons.info,
+                      Icon(
+                        UIcons.regularRounded.info,
                         size: 16,
                         color: AppColors.textSecondary,
                       ),
@@ -139,21 +139,21 @@ class WhyItHelpsPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                const _BenefitCard(
-                  icon: AppIcons.clock,
+                _BenefitCard(
+                  icon: UIcons.regularRounded.clock,
                   title: 'Log meals in seconds',
                   body:
                       "Less effort means you're more likely to keep tracking.",
                 ),
-                const _BenefitCard(
-                  icon: AppIcons.target,
+                _BenefitCard(
+                  icon: UIcons.regularRounded.bullseye,
                   title: 'Stay close to your goal',
                   body:
                       "See how much you've eaten against a daily target set "
                       'from your profile.',
                 ),
-                const _BenefitCard(
-                  icon: AppIcons.history,
+                _BenefitCard(
+                  icon: UIcons.regularRounded.stats,
                   title: 'Spot your patterns',
                   body: 'Your history shows your intake by day, week or month.',
                 ),

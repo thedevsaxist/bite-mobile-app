@@ -15,7 +15,8 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$DailySummary {
 
- int get eatenCalories; int get dailyReference; int get proteinGrams; int get carbsGrams; int get fatGrams; List<MealRecord> get meals;
+ int get eatenCalories;/// `null` until the user sets up their profile.
+ int? get dailyReference; int get proteinGrams; int get carbsGrams; int get fatGrams; List<MealRecord> get meals;
 /// Create a copy of DailySummary
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -51,7 +52,7 @@ abstract mixin class $DailySummaryCopyWith<$Res>  {
   factory $DailySummaryCopyWith(DailySummary value, $Res Function(DailySummary) _then) = _$DailySummaryCopyWithImpl;
 @useResult
 $Res call({
- int eatenCalories, int dailyReference, int proteinGrams, int carbsGrams, int fatGrams, List<MealRecord> meals
+ int eatenCalories, int? dailyReference, int proteinGrams, int carbsGrams, int fatGrams, List<MealRecord> meals
 });
 
 
@@ -68,11 +69,11 @@ class _$DailySummaryCopyWithImpl<$Res>
 
 /// Create a copy of DailySummary
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? eatenCalories = null,Object? dailyReference = null,Object? proteinGrams = null,Object? carbsGrams = null,Object? fatGrams = null,Object? meals = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? eatenCalories = null,Object? dailyReference = freezed,Object? proteinGrams = null,Object? carbsGrams = null,Object? fatGrams = null,Object? meals = null,}) {
   return _then(DailySummary(
 eatenCalories: null == eatenCalories ? _self.eatenCalories : eatenCalories // ignore: cast_nullable_to_non_nullable
-as int,dailyReference: null == dailyReference ? _self.dailyReference : dailyReference // ignore: cast_nullable_to_non_nullable
-as int,proteinGrams: null == proteinGrams ? _self.proteinGrams : proteinGrams // ignore: cast_nullable_to_non_nullable
+as int,dailyReference: freezed == dailyReference ? _self.dailyReference : dailyReference // ignore: cast_nullable_to_non_nullable
+as int?,proteinGrams: null == proteinGrams ? _self.proteinGrams : proteinGrams // ignore: cast_nullable_to_non_nullable
 as int,carbsGrams: null == carbsGrams ? _self.carbsGrams : carbsGrams // ignore: cast_nullable_to_non_nullable
 as int,fatGrams: null == fatGrams ? _self.fatGrams : fatGrams // ignore: cast_nullable_to_non_nullable
 as int,meals: null == meals ? _self.meals : meals // ignore: cast_nullable_to_non_nullable
@@ -161,7 +162,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int eatenCalories,  int dailyReference,  int proteinGrams,  int carbsGrams,  int fatGrams,  List<MealRecord> meals)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int eatenCalories,  int? dailyReference,  int proteinGrams,  int carbsGrams,  int fatGrams,  List<MealRecord> meals)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _DailySummary() when $default != null:
 return $default(_that.eatenCalories,_that.dailyReference,_that.proteinGrams,_that.carbsGrams,_that.fatGrams,_that.meals);case _:
@@ -182,7 +183,7 @@ return $default(_that.eatenCalories,_that.dailyReference,_that.proteinGrams,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int eatenCalories,  int dailyReference,  int proteinGrams,  int carbsGrams,  int fatGrams,  List<MealRecord> meals)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int eatenCalories,  int? dailyReference,  int proteinGrams,  int carbsGrams,  int fatGrams,  List<MealRecord> meals)  $default,) {final _that = this;
 switch (_that) {
 case _DailySummary():
 return $default(_that.eatenCalories,_that.dailyReference,_that.proteinGrams,_that.carbsGrams,_that.fatGrams,_that.meals);case _:
@@ -202,7 +203,7 @@ return $default(_that.eatenCalories,_that.dailyReference,_that.proteinGrams,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int eatenCalories,  int dailyReference,  int proteinGrams,  int carbsGrams,  int fatGrams,  List<MealRecord> meals)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int eatenCalories,  int? dailyReference,  int proteinGrams,  int carbsGrams,  int fatGrams,  List<MealRecord> meals)?  $default,) {final _that = this;
 switch (_that) {
 case _DailySummary() when $default != null:
 return $default(_that.eatenCalories,_that.dailyReference,_that.proteinGrams,_that.carbsGrams,_that.fatGrams,_that.meals);case _:
@@ -221,7 +222,8 @@ class _DailySummary extends DailySummary {
   
 
 @override final  int eatenCalories;
-@override final  int dailyReference;
+/// `null` until the user sets up their profile.
+@override final  int? dailyReference;
 @override final  int proteinGrams;
 @override final  int carbsGrams;
 @override final  int fatGrams;
@@ -265,7 +267,7 @@ abstract mixin class _$DailySummaryCopyWith<$Res> implements $DailySummaryCopyWi
   factory _$DailySummaryCopyWith(_DailySummary value, $Res Function(_DailySummary) _then) = __$DailySummaryCopyWithImpl;
 @override @useResult
 $Res call({
- int eatenCalories, int dailyReference, int proteinGrams, int carbsGrams, int fatGrams, List<MealRecord> meals
+ int eatenCalories, int? dailyReference, int proteinGrams, int carbsGrams, int fatGrams, List<MealRecord> meals
 });
 
 
@@ -282,11 +284,11 @@ class __$DailySummaryCopyWithImpl<$Res>
 
 /// Create a copy of DailySummary
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? eatenCalories = null,Object? dailyReference = null,Object? proteinGrams = null,Object? carbsGrams = null,Object? fatGrams = null,Object? meals = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? eatenCalories = null,Object? dailyReference = freezed,Object? proteinGrams = null,Object? carbsGrams = null,Object? fatGrams = null,Object? meals = null,}) {
   return _then(_DailySummary(
 eatenCalories: null == eatenCalories ? _self.eatenCalories : eatenCalories // ignore: cast_nullable_to_non_nullable
-as int,dailyReference: null == dailyReference ? _self.dailyReference : dailyReference // ignore: cast_nullable_to_non_nullable
-as int,proteinGrams: null == proteinGrams ? _self.proteinGrams : proteinGrams // ignore: cast_nullable_to_non_nullable
+as int,dailyReference: freezed == dailyReference ? _self.dailyReference : dailyReference // ignore: cast_nullable_to_non_nullable
+as int?,proteinGrams: null == proteinGrams ? _self.proteinGrams : proteinGrams // ignore: cast_nullable_to_non_nullable
 as int,carbsGrams: null == carbsGrams ? _self.carbsGrams : carbsGrams // ignore: cast_nullable_to_non_nullable
 as int,fatGrams: null == fatGrams ? _self.fatGrams : fatGrams // ignore: cast_nullable_to_non_nullable
 as int,meals: null == meals ? _self._meals : meals // ignore: cast_nullable_to_non_nullable

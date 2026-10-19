@@ -15,7 +15,7 @@ final profileSetupViewModelProvider = ProfileSetupViewModelProvider._();
 
 /// 03 Profile setup. Also used to edit details from Profile & settings.
 final class ProfileSetupViewModelProvider
-    extends $NotifierProvider<ProfileSetupViewModel, ProfileSetupState> {
+    extends $AsyncNotifierProvider<ProfileSetupViewModel, ProfileSetupState> {
   /// 03 Profile setup. Also used to edit details from Profile & settings.
   ProfileSetupViewModelProvider._()
     : super(
@@ -34,32 +34,26 @@ final class ProfileSetupViewModelProvider
   @$internal
   @override
   ProfileSetupViewModel create() => ProfileSetupViewModel();
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(ProfileSetupState value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<ProfileSetupState>(value),
-    );
-  }
 }
 
 String _$profileSetupViewModelHash() =>
-    r'1b455d750dd7e5ad509fcc789a8e9656af57c3c4';
+    r'6b6af58524720cfc5ab158b5b01c12cc70e3db61';
 
 /// 03 Profile setup. Also used to edit details from Profile & settings.
 
-abstract class _$ProfileSetupViewModel extends $Notifier<ProfileSetupState> {
-  ProfileSetupState build();
+abstract class _$ProfileSetupViewModel
+    extends $AsyncNotifier<ProfileSetupState> {
+  FutureOr<ProfileSetupState> build();
   @$mustCallSuper
   @override
   WhenComplete runBuild() {
-    final ref = this.ref as $Ref<ProfileSetupState, ProfileSetupState>;
+    final ref =
+        this.ref as $Ref<AsyncValue<ProfileSetupState>, ProfileSetupState>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<ProfileSetupState, ProfileSetupState>,
-              ProfileSetupState,
+              AnyNotifier<AsyncValue<ProfileSetupState>, ProfileSetupState>,
+              AsyncValue<ProfileSetupState>,
               Object?,
               Object?
             >;

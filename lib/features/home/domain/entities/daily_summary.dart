@@ -9,7 +9,9 @@ part 'daily_summary.freezed.dart';
 abstract class DailySummary with _$DailySummary {
   const factory DailySummary({
     required int eatenCalories,
-    required int dailyReference,
+
+    /// `null` until the user sets up their profile.
+    required int? dailyReference,
     required int proteinGrams,
     required int carbsGrams,
     required int fatGrams,
@@ -17,10 +19,18 @@ abstract class DailySummary with _$DailySummary {
   }) = _DailySummary;
   const DailySummary._();
 
-  int get remainingCalories =>
-      (dailyReference - eatenCalories).clamp(0, dailyReference);
+  /// `null` without a daily reference.
+  int? get remainingCalories => switch (dailyReference) {
+    final reference? => (reference - eatenCalories).clamp(0, reference),
+    null => null,
+  };
 
   /// 0–1, capped at 1 when over the reference.
-  double get progress =>
-      dailyReference == 0 ? 0 : (eatenCalories / dailyReference).clamp(0, 1);
+  double get progress => switch (dailyReference) {
+    final reference? when reference > 0 => (eatenCalories / reference).clamp(
+      0,
+      1,
+    ),
+    _ => 0,
+  };
 }

@@ -36,7 +36,7 @@ final class SettingsViewModelProvider
   SettingsViewModel create() => SettingsViewModel();
 }
 
-String _$settingsViewModelHash() => r'96b417a1f15bb03b6a5b262f9f3ce6d7d36eda25';
+String _$settingsViewModelHash() => r'18d5a741b95ea181939600f3d652ab50509d0227';
 
 /// 12 Profile & settings.
 

@@ -36,7 +36,7 @@ final class HomeViewModelProvider
   HomeViewModel create() => HomeViewModel();
 }
 
-String _$homeViewModelHash() => r'9550b55d61e651253d9cc37edc0b2a922b3cdc73';
+String _$homeViewModelHash() => r'8eec7dbf73fbad24ac54455d6355a6873976d721';
 
 /// 04 Home (today).
 

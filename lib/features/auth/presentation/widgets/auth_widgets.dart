@@ -3,7 +3,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:calorie_estimator/core/theme/app_colors.dart';
 import 'package:calorie_estimator/core/theme/app_spacing.dart';
 import 'package:calorie_estimator/core/utils/validators.dart';
-import 'package:calorie_estimator/core/theme/app_icons.dart';
+import 'package:uicons/uicons.dart';
 
 /// Title + subtitle at the top of the auth screens.
 class AuthHeader extends StatelessWidget {
@@ -63,7 +63,10 @@ class SocialSignInButton extends StatelessWidget {
       ),
       // TODO: Google's sign-in guidelines ask for the full-colour "G" logo;
       // swap in the official asset before release.
-      icon: Icon(isApple ? AppIcons.apple : AppIcons.google, size: 20),
+      icon: Icon(
+        isApple ? UIcons.brands.apple : UIcons.brands.google,
+        size: 20,
+      ),
       label: Text(isApple ? 'Continue with Apple' : 'Continue with Google'),
     );
   }
@@ -111,7 +114,11 @@ class PasswordVisibilityToggle extends StatelessWidget {
       onPressed: onPressed,
       tooltip: obscured ? 'Show password' : 'Hide password',
       color: AppColors.textSecondary,
-      icon: Icon(obscured ? AppIcons.show : AppIcons.hide),
+      icon: Icon(
+        obscured
+            ? UIcons.regularRounded.eye
+            : UIcons.regularRounded.eye_crossed,
+      ),
     );
   }
 }
@@ -183,7 +190,11 @@ class _RuleRow extends StatelessWidget {
                   : Border.all(color: AppColors.inactive, width: 2),
             ),
             child: met
-                ? const Icon(AppIcons.check, size: 12, color: Colors.white)
+                ? Icon(
+                    UIcons.regularRounded.check,
+                    size: 12,
+                    color: Colors.white,
+                  )
                 : null,
           ),
           Flexible(

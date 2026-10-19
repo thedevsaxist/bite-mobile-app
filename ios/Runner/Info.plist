@@ -8,6 +8,27 @@
 		<string>$(DEVELOPMENT_LANGUAGE)</string>
 		<key>CFBundleDisplayName</key>
 		<string>Bite</string>
+		<!-- Google Sign-In: values come from Flutter/GoogleSignIn.xcconfig. -->
+		<key>GIDClientID</key>
+		<string>$(GOOGLE_IOS_CLIENT_ID)</string>
+		<key>CFBundleURLTypes</key>
+		<array>
+			<dict>
+				<key>CFBundleTypeRole</key>
+				<string>Editor</string>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<string>$(GOOGLE_REVERSED_CLIENT_ID)</string>
+				</array>
+			</dict>
+		</array>
+		<!-- Lets debug builds reach the backend over plain HTTP on localhost
+		     or the local network. Production should use HTTPS. -->
+		<key>NSAppTransportSecurity</key>
+		<dict>
+			<key>NSAllowsLocalNetworking</key>
+			<true/>
+		</dict>
 		<key>NSCameraUsageDescription</key>
 		<string>The camera is used to take photos of your meals so they can be analysed for calories.</string>
 		<key>NSPhotoLibraryUsageDescription</key>

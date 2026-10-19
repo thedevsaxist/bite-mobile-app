@@ -28,6 +28,14 @@ class PreferencesService {
         ),
       );
 
+  /// `false` until [setHasLaunchedBefore] runs on the first start after
+  /// install.
+  bool get hasLaunchedBefore =>
+      _prefs.getBool(PreferenceKeys.hasLaunchedBefore) ?? false;
+
+  Future<void> setHasLaunchedBefore() =>
+      _prefs.setBool(PreferenceKeys.hasLaunchedBefore, true);
+
   bool get hasSeenWelcome =>
       _prefs.getBool(PreferenceKeys.hasSeenWelcome) ?? false;
 

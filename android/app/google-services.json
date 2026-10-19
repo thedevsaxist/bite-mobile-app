@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "644722027095",
+    "project_id": "bite-466bf",
+    "storage_bucket": "bite-466bf.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:644722027095:android:072960786f525f09d05112",
+        "android_client_info": {
+          "package_name": "com.bite.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "644722027095-0o660g81k9chkqtpg2ms2bdu12k7jfdd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bite.app",
+            "certificate_hash": "197364ca9268c5144b8f310d3f77b5986e4241ea"
+          }
+        },
+        {
+          "client_id": "644722027095-aaaruv14k0uo8f0dv62g6loj5kutm3nk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAL5Tlgosn1IDuIdXadp0vZKasfFSvEhoQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "644722027095-aaaruv14k0uo8f0dv62g6loj5kutm3nk.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "644722027095-1snu1cnmu1kjlcgcujgsdrk5qua253tn.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.bite.app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -25,3 +25,8 @@ class UnauthorizedException extends AppException {
 class CacheException extends AppException {
   const CacheException(super.message);
 }
+
+/// The user backed out, e.g. closed the Google or Apple sign-in sheet.
+class CancelledException extends AppException {
+  const CancelledException([super.message = 'Cancelled.']);
+}

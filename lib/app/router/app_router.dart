@@ -1,9 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:calorie_estimator/app/router/app_routes.dart';
 import 'package:calorie_estimator/app/shell/main_shell.dart';
+import 'package:calorie_estimator/core/utils/platform.dart';
+import 'package:calorie_estimator/features/auth/presentation/view_models/auth_session.dart';
 import 'package:calorie_estimator/features/auth/presentation/views/create_account_view.dart';
 import 'package:calorie_estimator/features/auth/presentation/views/login_view.dart';
 import 'package:calorie_estimator/features/food_analysis/presentation/views/analysing_view.dart';
@@ -21,13 +24,33 @@ import 'package:calorie_estimator/features/settings/presentation/views/settings_
 
 part 'app_router.g.dart';
 
+/// Reachable without signing in. Splash sends signed-in users on to Home.
+const _publicRoutes = {
+  AppRoutes.splash,
+  AppRoutes.welcome,
+  AppRoutes.onboarding,
+  AppRoutes.login,
+  AppRoutes.createAccount,
+};
+
 @Riverpod(keepAlive: true)
 GoRouter appRouter(Ref ref) {
-  // TODO: add a redirect once the auth feature exposes session state —
-  // signed-in users skip Welcome, signed-out users can't reach the tabs.
+  // Re-runs the redirect when someone signs in or out.
+  final isSignedIn = ValueNotifier(ref.read(authSessionProvider));
+  ref
+    ..listen(authSessionProvider, (_, next) => isSignedIn.value = next)
+    ..onDispose(isSignedIn.dispose);
+
   return GoRouter(
     initialLocation: AppRoutes.splash,
     debugLogDiagnostics: kDebugMode,
+    refreshListenable: isSignedIn,
+    // Signed-out users (after log out, or when the session ends) go back to
+    // Welcome from anywhere past sign-in.
+    redirect: (context, state) =>
+        isSignedIn.value || _publicRoutes.contains(state.matchedLocation)
+        ? null
+        : AppRoutes.welcome,
     routes: [
       GoRoute(
         path: AppRoutes.splash,
@@ -89,7 +112,8 @@ GoRouter appRouter(Ref ref) {
       ),
       GoRoute(
         path: AppRoutes.capture,
-        builder: (context, state) => const CaptureView(),
+        pageBuilder: (context, state) =>
+            _modalPage(context, state, const CaptureView()),
       ),
       GoRoute(
         path: AppRoutes.mealDetails,
@@ -108,5 +132,36 @@ GoRouter appRouter(Ref ref) {
         builder: (context, state) => const AnalysisErrorView(),
       ),
     ],
+  );
+}
+
+/// A full-screen page that slides up from the bottom of the screen.
+///
+/// iOS uses the native full-screen modal transition; Android, whose default
+/// is a zoom, gets a matching slide.
+Page<void> _modalPage(BuildContext context, GoRouterState state, Widget child) {
+  if (isCupertinoPlatform(context)) {
+    return MaterialPage(
+      key: state.pageKey,
+      fullscreenDialog: true,
+      child: child,
+    );
+  }
+
+  return CustomTransitionPage(
+    key: state.pageKey,
+    fullscreenDialog: true,
+    transitionDuration: const Duration(milliseconds: 400),
+    reverseTransitionDuration: const Duration(milliseconds: 300),
+    child: child,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+        SlideTransition(
+          position: CurvedAnimation(
+            parent: animation,
+            curve: Curves.fastEaseInToSlowEaseOut,
+            reverseCurve: Curves.fastEaseInToSlowEaseOut.flipped,
+          ).drive(Tween(begin: const Offset(0, 1), end: Offset.zero)),
+          child: child,
+        ),
   );
 }

@@ -3,9 +3,12 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:sqflite/sqflite.dart';
 
 import 'package:calorie_estimator/core/error/exceptions.dart';
 import 'package:calorie_estimator/core/error/failures.dart';
+import 'package:calorie_estimator/core/network/api_error.dart';
+import 'package:calorie_estimator/core/network/interceptors/auth_interceptor.dart';
 import 'package:calorie_estimator/core/utils/typedefs.dart';
 
 /// Runs a data-layer call and converts any thrown error into a [Failure].
@@ -19,6 +22,11 @@ FutureEither<T> guard<T>(Future<T> Function() call) async {
     return Left(mapDioException(e));
   } on AppException catch (e) {
     return Left(mapAppException(e));
+  } on DatabaseException catch (e) {
+    debugPrint('Database error: $e');
+    return const Left(
+      CacheFailure("Couldn't read or save data on this device."),
+    );
   } catch (e, stackTrace) {
     debugPrint('Unhandled error: $e\n$stackTrace');
     return const Left(UnknownFailure());
@@ -32,6 +40,7 @@ Failure mapAppException(AppException e) => switch (e) {
   ),
   NetworkException() => const NetworkFailure(),
   UnauthorizedException() => const UnauthorizedFailure(),
+  CancelledException() => const CancelledFailure(),
   CacheException(:final message) => CacheFailure(message),
 };
 
@@ -47,6 +56,7 @@ Failure mapDioException(DioException e) {
     case DioExceptionType.badResponse:
       return _mapResponse(e.response);
     case DioExceptionType.cancel:
+      return const CancelledFailure();
     case DioExceptionType.badCertificate:
     case DioExceptionType.unknown:
       return switch (e.error) {
@@ -57,56 +67,24 @@ Failure mapDioException(DioException e) {
   }
 }
 
+/// Maps the backend's `{"success": false, "error": {...}}` body to a
+/// [Failure], keeping the server's message, which is written for users.
 Failure _mapResponse(Response<dynamic>? response) {
   final statusCode = response?.statusCode;
-  final data = response?.data;
-  final message = _extractMessage(data) ?? const UnknownFailure().message;
+  final error = ApiError.fromResponseData(response?.data);
+  final message = error?.message ?? const UnknownFailure().message;
 
   return switch (statusCode) {
+    // On public endpoints a 401 means wrong credentials ("Invalid email or
+    // password"); everywhere else it means the session is over.
+    401 when response?.requestOptions.extra[AuthInterceptor.skipAuth] == true =>
+      UnauthorizedFailure(message),
     401 => const UnauthorizedFailure(),
-    400 ||
-    422 => ValidationFailure(message, fieldErrors: _extractFieldErrors(data)),
-    _ => ServerFailure(message, statusCode: statusCode),
+    400 || 422 => ValidationFailure(
+      error?.fieldErrors.values.firstOrNull ?? message,
+      fieldErrors: error?.fieldErrors ?? const {},
+      code: error?.code,
+    ),
+    _ => ServerFailure(message, statusCode: statusCode, code: error?.code),
   };
-}
-
-/// Reads the error message from common backend error shapes:
-/// `{"message": "..."}`, `{"error": "..."}` or `{"detail": "..."}`.
-String? _extractMessage(Object? data) {
-  if (data is! Map) return null;
-  for (final key in const ['message', 'error', 'detail']) {
-    final value = data[key];
-    if (value is String && value.isNotEmpty) return value;
-  }
-  final fieldErrors = _extractFieldErrors(data);
-  if (fieldErrors.isNotEmpty) return fieldErrors.values.first;
-  return null;
-}
-
-/// Reads per-field validation errors from either
-/// `{"errors": {"email": "..."}}` or a FastAPI-style
-/// `{"detail": [{"loc": [..., "email"], "msg": "..."}]}`.
-Map<String, String> _extractFieldErrors(Object? data) {
-  if (data is! Map) return const {};
-
-  final errors = data['errors'];
-  if (errors is Map) {
-    return {
-      for (final entry in errors.entries)
-        '${entry.key}': entry.value is List
-            ? (entry.value as List).join(' ')
-            : '${entry.value}',
-    };
-  }
-
-  final detail = data['detail'];
-  if (detail is List) {
-    return {
-      for (final item in detail.whereType<Map>())
-        if (item['loc'] case [..., final Object field])
-          '$field': '${item['msg']}',
-    };
-  }
-
-  return const {};
 }

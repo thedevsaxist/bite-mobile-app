@@ -13,9 +13,11 @@ part of 'capture_view_model.dart';
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
-mixin _$CaptureState {
+mixin _$CaptureState implements DiagnosticableTreeMixin {
 
- bool get isCameraReady; bool get flashOn; bool get isCapturing; String? get errorMessage;
+ bool get isCameraReady; bool get flashOn; bool get isCapturing;/// Why there is no preview (no permission, no camera); the gallery
+/// still works.
+ String? get cameraMessage;
 /// Create a copy of CaptureState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -23,24 +25,31 @@ mixin _$CaptureState {
 $CaptureStateCopyWith<CaptureState> get copyWith => _$CaptureStateCopyWithImpl<CaptureState>(this as CaptureState, _$identity);
 
 
+@override
+void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+  final _this = this as CaptureState;
+  properties
+    ..add(DiagnosticsProperty('type', 'CaptureState'))
+    ..add(DiagnosticsProperty('isCameraReady', _this.isCameraReady))..add(DiagnosticsProperty('flashOn', _this.flashOn))..add(DiagnosticsProperty('isCapturing', _this.isCapturing))..add(DiagnosticsProperty('cameraMessage', _this.cameraMessage));
+}
 
 @override
 bool operator ==(Object other) {
   final _this = this as CaptureState;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CaptureState&&(identical(other.isCameraReady, _this.isCameraReady) || other.isCameraReady == _this.isCameraReady)&&(identical(other.flashOn, _this.flashOn) || other.flashOn == _this.flashOn)&&(identical(other.isCapturing, _this.isCapturing) || other.isCapturing == _this.isCapturing)&&(identical(other.errorMessage, _this.errorMessage) || other.errorMessage == _this.errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CaptureState&&(identical(other.isCameraReady, _this.isCameraReady) || other.isCameraReady == _this.isCameraReady)&&(identical(other.flashOn, _this.flashOn) || other.flashOn == _this.flashOn)&&(identical(other.isCapturing, _this.isCapturing) || other.isCapturing == _this.isCapturing)&&(identical(other.cameraMessage, _this.cameraMessage) || other.cameraMessage == _this.cameraMessage));
 }
 
 
 @override
 int get hashCode {
   final _this = this as CaptureState;
-  return Object.hash(runtimeType,_this.isCameraReady,_this.flashOn,_this.isCapturing,_this.errorMessage);
+  return Object.hash(runtimeType,_this.isCameraReady,_this.flashOn,_this.isCapturing,_this.cameraMessage);
 }
 
 @override
-String toString() {
+String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
   final _this = this as CaptureState;
-  return 'CaptureState(isCameraReady: ${_this.isCameraReady}, flashOn: ${_this.flashOn}, isCapturing: ${_this.isCapturing}, errorMessage: ${_this.errorMessage})';
+  return 'CaptureState(isCameraReady: ${_this.isCameraReady}, flashOn: ${_this.flashOn}, isCapturing: ${_this.isCapturing}, cameraMessage: ${_this.cameraMessage})';
 }
 
 
@@ -51,7 +60,7 @@ abstract mixin class $CaptureStateCopyWith<$Res>  {
   factory $CaptureStateCopyWith(CaptureState value, $Res Function(CaptureState) _then) = _$CaptureStateCopyWithImpl;
 @useResult
 $Res call({
- bool isCameraReady, bool flashOn, bool isCapturing, String? errorMessage
+ bool isCameraReady, bool flashOn, bool isCapturing, String? cameraMessage
 });
 
 
@@ -68,12 +77,12 @@ class _$CaptureStateCopyWithImpl<$Res>
 
 /// Create a copy of CaptureState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? isCameraReady = null,Object? flashOn = null,Object? isCapturing = null,Object? errorMessage = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? isCameraReady = null,Object? flashOn = null,Object? isCapturing = null,Object? cameraMessage = freezed,}) {
   return _then(CaptureState(
 isCameraReady: null == isCameraReady ? _self.isCameraReady : isCameraReady // ignore: cast_nullable_to_non_nullable
 as bool,flashOn: null == flashOn ? _self.flashOn : flashOn // ignore: cast_nullable_to_non_nullable
 as bool,isCapturing: null == isCapturing ? _self.isCapturing : isCapturing // ignore: cast_nullable_to_non_nullable
-as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as bool,cameraMessage: freezed == cameraMessage ? _self.cameraMessage : cameraMessage // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -159,10 +168,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool isCameraReady,  bool flashOn,  bool isCapturing,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool isCameraReady,  bool flashOn,  bool isCapturing,  String? cameraMessage)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CaptureState() when $default != null:
-return $default(_that.isCameraReady,_that.flashOn,_that.isCapturing,_that.errorMessage);case _:
+return $default(_that.isCameraReady,_that.flashOn,_that.isCapturing,_that.cameraMessage);case _:
   return orElse();
 
 }
@@ -180,10 +189,10 @@ return $default(_that.isCameraReady,_that.flashOn,_that.isCapturing,_that.errorM
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool isCameraReady,  bool flashOn,  bool isCapturing,  String? errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool isCameraReady,  bool flashOn,  bool isCapturing,  String? cameraMessage)  $default,) {final _that = this;
 switch (_that) {
 case _CaptureState():
-return $default(_that.isCameraReady,_that.flashOn,_that.isCapturing,_that.errorMessage);case _:
+return $default(_that.isCameraReady,_that.flashOn,_that.isCapturing,_that.cameraMessage);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -200,10 +209,10 @@ return $default(_that.isCameraReady,_that.flashOn,_that.isCapturing,_that.errorM
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool isCameraReady,  bool flashOn,  bool isCapturing,  String? errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool isCameraReady,  bool flashOn,  bool isCapturing,  String? cameraMessage)?  $default,) {final _that = this;
 switch (_that) {
 case _CaptureState() when $default != null:
-return $default(_that.isCameraReady,_that.flashOn,_that.isCapturing,_that.errorMessage);case _:
+return $default(_that.isCameraReady,_that.flashOn,_that.isCapturing,_that.cameraMessage);case _:
   return null;
 
 }
@@ -214,14 +223,16 @@ return $default(_that.isCameraReady,_that.flashOn,_that.isCapturing,_that.errorM
 /// @nodoc
 
 
-class _CaptureState implements CaptureState {
-  const _CaptureState({this.isCameraReady = false, this.flashOn = false, this.isCapturing = false, this.errorMessage});
+class _CaptureState with DiagnosticableTreeMixin implements CaptureState {
+  const _CaptureState({this.isCameraReady = false, this.flashOn = false, this.isCapturing = false, this.cameraMessage});
   
 
 @override@JsonKey() final  bool isCameraReady;
 @override@JsonKey() final  bool flashOn;
 @override@JsonKey() final  bool isCapturing;
-@override final  String? errorMessage;
+/// Why there is no preview (no permission, no camera); the gallery
+/// still works.
+@override final  String? cameraMessage;
 
 /// Create a copy of CaptureState
 /// with the given fields replaced by the non-null parameter values.
@@ -230,21 +241,27 @@ class _CaptureState implements CaptureState {
 _$CaptureStateCopyWith<_CaptureState> get copyWith => __$CaptureStateCopyWithImpl<_CaptureState>(this, _$identity);
 
 
+@override
+void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    properties
+    ..add(DiagnosticsProperty('type', 'CaptureState'))
+    ..add(DiagnosticsProperty('isCameraReady', isCameraReady))..add(DiagnosticsProperty('flashOn', flashOn))..add(DiagnosticsProperty('isCapturing', isCapturing))..add(DiagnosticsProperty('cameraMessage', cameraMessage));
+}
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _CaptureState&&(identical(other.isCameraReady, isCameraReady) || other.isCameraReady == isCameraReady)&&(identical(other.flashOn, flashOn) || other.flashOn == flashOn)&&(identical(other.isCapturing, isCapturing) || other.isCapturing == isCapturing)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _CaptureState&&(identical(other.isCameraReady, isCameraReady) || other.isCameraReady == isCameraReady)&&(identical(other.flashOn, flashOn) || other.flashOn == flashOn)&&(identical(other.isCapturing, isCapturing) || other.isCapturing == isCapturing)&&(identical(other.cameraMessage, cameraMessage) || other.cameraMessage == cameraMessage));
 }
 
 
 @override
 int get hashCode {
-    return Object.hash(runtimeType,isCameraReady,flashOn,isCapturing,errorMessage);
+    return Object.hash(runtimeType,isCameraReady,flashOn,isCapturing,cameraMessage);
 }
 
 @override
-String toString() {
-    return 'CaptureState(isCameraReady: $isCameraReady, flashOn: $flashOn, isCapturing: $isCapturing, errorMessage: $errorMessage)';
+String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
+    return 'CaptureState(isCameraReady: $isCameraReady, flashOn: $flashOn, isCapturing: $isCapturing, cameraMessage: $cameraMessage)';
 }
 
 
@@ -255,7 +272,7 @@ abstract mixin class _$CaptureStateCopyWith<$Res> implements $CaptureStateCopyWi
   factory _$CaptureStateCopyWith(_CaptureState value, $Res Function(_CaptureState) _then) = __$CaptureStateCopyWithImpl;
 @override @useResult
 $Res call({
- bool isCameraReady, bool flashOn, bool isCapturing, String? errorMessage
+ bool isCameraReady, bool flashOn, bool isCapturing, String? cameraMessage
 });
 
 
@@ -272,12 +289,12 @@ class __$CaptureStateCopyWithImpl<$Res>
 
 /// Create a copy of CaptureState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? isCameraReady = null,Object? flashOn = null,Object? isCapturing = null,Object? errorMessage = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? isCameraReady = null,Object? flashOn = null,Object? isCapturing = null,Object? cameraMessage = freezed,}) {
   return _then(_CaptureState(
 isCameraReady: null == isCameraReady ? _self.isCameraReady : isCameraReady // ignore: cast_nullable_to_non_nullable
 as bool,flashOn: null == flashOn ? _self.flashOn : flashOn // ignore: cast_nullable_to_non_nullable
 as bool,isCapturing: null == isCapturing ? _self.isCapturing : isCapturing // ignore: cast_nullable_to_non_nullable
-as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as bool,cameraMessage: freezed == cameraMessage ? _self.cameraMessage : cameraMessage // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }

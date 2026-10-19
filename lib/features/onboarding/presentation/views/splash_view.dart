@@ -38,7 +38,8 @@ class _SplashViewState extends ConsumerState<SplashView> {
         case AsyncData(:final value):
           _goTo(value);
         case AsyncError():
-          // TODO: surface start-up errors once there is real start-up work.
+          // Restoring the session falls back to the cache, so an error here
+          // is unexpected; start signed out rather than stall on the splash.
           _goTo(StartDestination.welcome);
         default:
           break;
@@ -53,6 +54,7 @@ class _SplashViewState extends ConsumerState<SplashView> {
       if (!mounted) return;
       context.go(switch (destination) {
         StartDestination.welcome => AppRoutes.welcome,
+        StartDestination.login => AppRoutes.login,
         StartDestination.home => AppRoutes.home,
       });
     });

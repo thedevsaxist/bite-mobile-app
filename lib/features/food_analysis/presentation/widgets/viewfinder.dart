@@ -5,12 +5,16 @@ import 'package:calorie_estimator/core/widgets/plate_illustration.dart';
 
 /// Camera viewfinder with corner guides and a framing hint.
 ///
-/// Shows the plate illustration until the camera preview is wired up.
+/// Shows the plate illustration while the camera starts, or with
+/// [message] when there is no camera to use.
 class Viewfinder extends StatelessWidget {
-  const Viewfinder({this.preview, super.key});
+  const Viewfinder({this.preview, this.message, super.key});
 
   /// The live camera preview. Null shows the placeholder plate.
   final Widget? preview;
+
+  /// Shown under the placeholder, e.g. when camera access is off.
+  final String? message;
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +46,21 @@ class Viewfinder extends StatelessWidget {
               padding: EdgeInsets.all(32),
               child: CustomPaint(painter: _CornerGuidesPainter()),
             ),
+            if (preview == null && message != null)
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(48, 0, 48, 56),
+                  child: Text(
+                    message!,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
             Align(
               alignment: Alignment.topCenter,
               child: Padding(

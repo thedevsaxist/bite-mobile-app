@@ -61,7 +61,7 @@ class WelcomeView extends StatelessWidget {
                     onPressed: () => context.push(AppRoutes.login),
                   ),
                   Text(
-                    'No account needed to start.',
+                    'Free to use. Your meals stay private to your account.',
                     textAlign: TextAlign.center,
                     style: textTheme.bodySmall,
                   ),

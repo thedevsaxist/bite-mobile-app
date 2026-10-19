@@ -59,9 +59,9 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const AppIconButton.back(semanticLabel: 'Back to welcome'),
+                  AppIconButton.back(semanticLabel: 'Back to welcome'),
                   TextButton(
-                    onPressed: () => _finish(AppRoutes.profileSetup),
+                    onPressed: () => _finish(AppRoutes.createAccount),
                     style: TextButton.styleFrom(
                       foregroundColor: AppColors.textSecondary,
                     ),
@@ -88,13 +88,15 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   spacing: AppSpacing.xxs,
                   children: [
+                    // An account is needed: every backend feature is
+                    // per user.
                     PrimaryButton(
                       label: 'Continue to ${AppConstants.appName}',
-                      onPressed: () => _finish(AppRoutes.profileSetup),
+                      onPressed: () => _finish(AppRoutes.createAccount),
                     ),
                     TertiaryButton(
-                      label: 'Create an account or log in',
-                      onPressed: () => _finish(AppRoutes.createAccount),
+                      label: 'I already have an account',
+                      onPressed: () => _finish(AppRoutes.login),
                     ),
                   ],
                 )

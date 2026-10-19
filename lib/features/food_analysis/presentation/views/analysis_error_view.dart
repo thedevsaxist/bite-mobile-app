@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -8,8 +9,7 @@ import 'package:calorie_estimator/core/theme/app_spacing.dart';
 import 'package:calorie_estimator/core/widgets/app_buttons.dart';
 import 'package:calorie_estimator/core/widgets/app_icon_button.dart';
 import 'package:calorie_estimator/core/widgets/section_label.dart';
-import 'package:calorie_estimator/features/food_analysis/presentation/view_models/capture_view_model.dart';
-import 'package:calorie_estimator/core/theme/app_icons.dart';
+import 'package:calorie_estimator/features/food_analysis/presentation/view_models/scan_session_view_model.dart';
 
 /// 10 Couldn't analyse — shown when the photo can't be read.
 class AnalysisErrorView extends ConsumerWidget {
@@ -24,6 +24,9 @@ class AnalysisErrorView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final textTheme = Theme.of(context).textTheme;
+    final reason = ref.watch(
+      scanSessionViewModelProvider.select((s) => s.unreadableReason),
+    );
 
     void close() => context.go(AppRoutes.home);
 
@@ -57,10 +60,16 @@ class AnalysisErrorView extends ConsumerWidget {
                             color: AppColors.warningContainer,
                             shape: BoxShape.circle,
                           ),
-                          child: const Icon(
-                            AppIcons.photoError,
-                            size: 44,
-                            color: AppColors.warning,
+                          // UIcons camera-slash (Flaticon); not in the uicons
+                          // package, so it ships as an SVG.
+                          child: SvgPicture.asset(
+                            'assets/icons/camera-slash.svg',
+                            width: 44,
+                            height: 44,
+                            colorFilter: const ColorFilter.mode(
+                              AppColors.warning,
+                              BlendMode.srcIn,
+                            ),
                           ),
                         ),
                         Column(
@@ -72,8 +81,11 @@ class AnalysisErrorView extends ConsumerWidget {
                               style: textTheme.headlineSmall,
                             ),
                             Text(
-                              'The image is too blurry, too dark, or the food '
-                              "isn't clear enough to recognise.",
+                              // The backend says why, e.g. "The image is too
+                              // blurry. Take a clearer photo".
+                              reason ??
+                                  'The image is too blurry, too dark, or the '
+                                      "food isn't clear enough to recognise.",
                               textAlign: TextAlign.center,
                               style: textTheme.bodyMedium?.copyWith(
                                 color: AppColors.textSecondary,
@@ -135,7 +147,7 @@ class AnalysisErrorView extends ConsumerWidget {
                     label: 'Choose another photo',
                     onPressed: () async {
                       final picked = await ref
-                          .read(captureViewModelProvider.notifier)
+                          .read(scanSessionViewModelProvider.notifier)
                           .pickFromGallery();
                       if (picked && context.mounted) {
                         context.pushReplacement(AppRoutes.mealDetails);

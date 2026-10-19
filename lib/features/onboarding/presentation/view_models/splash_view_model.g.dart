@@ -36,7 +36,7 @@ final class SplashViewModelProvider
   SplashViewModel create() => SplashViewModel();
 }
 
-String _$splashViewModelHash() => r'67b5ed64bc65c0387f0eb2af9f30256c22a72f04';
+String _$splashViewModelHash() => r'b8311d2a8b051d918ee74800c0d38b9f2d9ef3f9';
 
 /// Start-up work behind the splash hand-off.
 

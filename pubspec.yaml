@@ -43,6 +43,8 @@ dependencies:
   go_router: ^18.1.0
   flutter_secure_storage: ^11.2.0
   shared_preferences: ^2.5.6
+  sqflite: ^2.4.4+2
+  path: ^1.9.1
   image_picker: ^1.2.4
   camera: ^0.12.1
   permission_handler: ^13.0.2
@@ -56,6 +58,13 @@ dependencies:
   cached_network_image: ^4.0.4
   material_ui: ^1.7.0
   uicons: ^1.0.1
+  liquid_glass_widgets: ^1.13.0
+  google_sign_in: ^7.2.0
+  sign_in_with_apple: ^8.2.0
+  crypto: ^3.0.7
+  firebase_core: ^4.0.0
+  firebase_auth: ^6.7.0
+  flutter_timezone: ^5.1.1
 
 dev_dependencies:
   flutter_test:
@@ -76,6 +85,7 @@ dev_dependencies:
   mocktail: ^1.0.5
   flutter_launcher_icons: ^0.14.4
   flutter_native_splash: ^2.4.8
+  sqflite_common_ffi: ^2.4.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -103,6 +113,11 @@ flutter:
           weight: 700
         - asset: assets/fonts/sf_pro_rounded/SF-Pro-Rounded-Heavy.otf
           weight: 800
+
+  assets:
+    # UIcons glyphs the uicons package doesn't have, as SVGs from Flaticon.
+    - assets/icons/
+    - assets/licenses/flaticon-uicons.txt
 
   # To add assets to your application, add an assets section, like this:
   # assets:

@@ -45,7 +45,7 @@ final class OnboardingViewModelProvider
 }
 
 String _$onboardingViewModelHash() =>
-    r'fbcb2a5b55a299bfda626ada12204bf7185ebb14';
+    r'638b79e288eaa888b1c399ef661fb13254846a08';
 
 /// Tracks the current onboarding page (0-based).
 

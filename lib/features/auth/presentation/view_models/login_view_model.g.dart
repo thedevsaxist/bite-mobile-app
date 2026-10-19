@@ -44,7 +44,7 @@ final class LoginViewModelProvider
   }
 }
 
-String _$loginViewModelHash() => r'f0e37619902e31f902f17745945bc488aca72aab';
+String _$loginViewModelHash() => r'04c428e83d5ce47f6bfe943a3142b9b41a3ae9a2';
 
 /// 01a Log in (returning users).
 

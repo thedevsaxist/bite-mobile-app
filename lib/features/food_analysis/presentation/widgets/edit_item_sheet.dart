@@ -7,13 +7,14 @@ import 'package:calorie_estimator/core/utils/formatters.dart';
 import 'package:calorie_estimator/core/widgets/app_buttons.dart';
 import 'package:calorie_estimator/core/widgets/labeled_text_field.dart';
 import 'package:calorie_estimator/core/widgets/option_button.dart';
-import 'package:calorie_estimator/features/food_analysis/domain/entities/food_analysis.dart';
+import 'package:calorie_estimator/features/food_analysis/domain/entities/nutrition_food.dart';
 import 'package:calorie_estimator/features/food_analysis/presentation/view_models/edit_item_view_model.dart';
 import 'package:calorie_estimator/features/food_analysis/presentation/view_models/scan_session_view_model.dart';
-import 'package:calorie_estimator/core/theme/app_icons.dart';
+import 'package:calorie_estimator/features/history/domain/entities/meal_record.dart';
+import 'package:uicons/uicons.dart';
 
 /// 09 Edit item, as a modal bottom sheet over the result.
-Future<void> showEditItemSheet(BuildContext context, RecognisedFoodItem item) {
+Future<void> showEditItemSheet(BuildContext context, MealItem item) {
   return showModalBottomSheet<void>(
     context: context,
     isScrollControlled: true,
@@ -26,22 +27,25 @@ Future<void> showEditItemSheet(BuildContext context, RecognisedFoodItem item) {
 class EditItemSheet extends ConsumerWidget {
   const EditItemSheet({required this.item, super.key});
 
-  final RecognisedFoodItem item;
+  final MealItem item;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = editItemViewModelProvider(item);
     final state = ref.watch(provider);
     final viewModel = ref.read(provider.notifier);
+    final session = ref.read(scanSessionViewModelProvider.notifier);
+    final isBusy = ref.watch(
+      scanSessionViewModelProvider.select((s) => s.isBusy),
+    );
     final textTheme = Theme.of(context).textTheme;
+    final estimate = state.estimate;
 
-    // Offer the item's own unit plus the common alternatives, three at most.
-    final units = {
-      item.unit,
-      PortionUnit.grams,
-      PortionUnit.cups,
-      PortionUnit.servings,
-    }.take(3);
+    // Closes once the change is applied (for a saved meal, once the backend
+    // has it); a failure shows on the result screen and keeps the sheet.
+    Future<void> apply(Future<bool> Function() change) async {
+      if (await change() && context.mounted) Navigator.pop(context);
+    }
 
     return Padding(
       padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
@@ -69,11 +73,33 @@ class EditItemSheet extends ConsumerWidget {
                 ),
               ],
             ),
-            LabeledTextField(
-              label: 'Food',
-              initialValue: state.name,
-              textInputAction: TextInputAction.done,
-              onChanged: viewModel.setName,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              spacing: AppSpacing.xs,
+              children: [
+                // Keyed by the reference so picking a food updates the text.
+                LabeledTextField(
+                  key: ValueKey(state.reference?.id),
+                  label: 'Food',
+                  initialValue: state.name,
+                  textInputAction: TextInputAction.done,
+                  onChanged: viewModel.setName,
+                ),
+                if (state.suggestions.isNotEmpty)
+                  _FoodSuggestions(
+                    foods: state.suggestions,
+                    onSelected: viewModel.selectFood,
+                  ),
+                Text(
+                  state.reference == null
+                      ? "This food isn't in our food data yet. Type to pick the "
+                            'closest one and get an estimate.'
+                      : 'Nutrition from our food data: ${state.reference!.name}.',
+                  style: textTheme.labelSmall?.copyWith(
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ],
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -87,7 +113,7 @@ class EditItemSheet extends ConsumerWidget {
                   spacing: AppSpacing.sm,
                   children: [
                     _StepperButton(
-                      icon: AppIcons.minus,
+                      icon: UIcons.regularRounded.minus,
                       semanticLabel: 'Less',
                       onPressed: viewModel.decrement,
                     ),
@@ -106,7 +132,11 @@ class EditItemSheet extends ConsumerWidget {
                               text: '${_formatQuantity(state.quantity)} ',
                               children: [
                                 TextSpan(
-                                  text: state.unit.symbol,
+                                  text:
+                                      state.unit == PortionUnit.servings &&
+                                          state.quantity == 1
+                                      ? 'serving'
+                                      : state.unit.symbol,
                                   style: textTheme.bodyMedium?.copyWith(
                                     fontWeight: FontWeight.w600,
                                     color: AppColors.textSecondary,
@@ -120,7 +150,7 @@ class EditItemSheet extends ConsumerWidget {
                       ),
                     ),
                     _StepperButton(
-                      icon: AppIcons.plus,
+                      icon: UIcons.regularRounded.plus,
                       semanticLabel: 'More',
                       onPressed: viewModel.increment,
                     ),
@@ -128,7 +158,7 @@ class EditItemSheet extends ConsumerWidget {
                 ),
                 OptionButtonRow(
                   height: 40,
-                  options: {for (final u in units) u: u.label},
+                  options: {for (final u in state.units) u: u.label},
                   selected: state.unit,
                   onChanged: viewModel.setUnit,
                 ),
@@ -150,7 +180,9 @@ class EditItemSheet extends ConsumerWidget {
                     ),
                   ),
                   Text(
-                    formatApproxKcal(state.estimatedCalories),
+                    estimate == null
+                        ? '—'
+                        : formatApproxKcal(estimate.calories.round()),
                     style: textTheme.titleLarge?.copyWith(fontSize: 20),
                   ),
                 ],
@@ -162,22 +194,18 @@ class EditItemSheet extends ConsumerWidget {
               children: [
                 PrimaryButton(
                   label: 'Save changes',
-                  onPressed: () {
-                    ref
-                        .read(scanSessionViewModelProvider.notifier)
-                        .updateItem(viewModel.buildUpdatedItem());
-                    Navigator.pop(context);
-                  },
+                  loadingLabel: 'Saving',
+                  isLoading: isBusy,
+                  onPressed: () => apply(
+                    () => session.updateItem(viewModel.buildUpdatedItem()),
+                  ),
                 ),
                 TertiaryButton(
                   label: 'Remove this item',
                   destructive: true,
-                  onPressed: () {
-                    ref
-                        .read(scanSessionViewModelProvider.notifier)
-                        .removeItem(item.id);
-                    Navigator.pop(context);
-                  },
+                  onPressed: isBusy
+                      ? null
+                      : () => apply(() => session.removeItem(item.id)),
                 ),
               ],
             ),
@@ -189,6 +217,56 @@ class EditItemSheet extends ConsumerWidget {
 
   static String _formatQuantity(double value) =>
       value == value.roundToDouble() ? '${value.round()}' : '$value';
+}
+
+/// Reference foods matching the typed name.
+class _FoodSuggestions extends StatelessWidget {
+  const _FoodSuggestions({required this.foods, required this.onSelected});
+
+  final List<NutritionFood> foods;
+  final ValueChanged<NutritionFood> onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(AppRadii.input),
+        border: Border.all(color: AppColors.inputBorder),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        children: [
+          for (final (index, food) in foods.indexed) ...[
+            if (index > 0) const Divider(height: 1),
+            InkWell(
+              onTap: () => onSelected(food),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.md,
+                  vertical: AppSpacing.sm,
+                ),
+                child: Row(
+                  spacing: AppSpacing.sm,
+                  children: [
+                    Expanded(
+                      child: Text(food.name, style: textTheme.titleSmall),
+                    ),
+                    Text(
+                      '${formatApproxKcal(food.nutrientsFor(1, PortionUnit.servings).calories.round())}'
+                      ' · ${food.typicalServingLabel}',
+                      style: textTheme.bodySmall,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
 }
 
 class _StepperButton extends StatelessWidget {

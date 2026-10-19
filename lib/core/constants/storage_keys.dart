@@ -6,8 +6,9 @@ abstract final class SecureStorageKeys {
 
 /// Keys for non-sensitive preferences kept in shared preferences.
 abstract final class PreferenceKeys {
+  static const hasLaunchedBefore = 'has_launched_before';
   static const hasSeenWelcome = 'has_seen_welcome';
   static const autoSaveResults = 'auto_save_results';
 
-  static const all = {hasSeenWelcome, autoSaveResults};
+  static const all = {hasLaunchedBefore, hasSeenWelcome, autoSaveResults};
 }

@@ -5,7 +5,6 @@ import 'package:material_ui/material_ui.dart';
 import 'package:calorie_estimator/app/router/app_routes.dart';
 import 'package:calorie_estimator/core/theme/app_colors.dart';
 import 'package:calorie_estimator/core/theme/app_spacing.dart';
-import 'package:calorie_estimator/core/utils/formatters.dart';
 import 'package:calorie_estimator/core/utils/platform.dart';
 import 'package:calorie_estimator/core/widgets/async_value_view.dart';
 import 'package:calorie_estimator/core/widgets/initials_avatar.dart';
@@ -13,6 +12,7 @@ import 'package:calorie_estimator/core/widgets/meal_tile.dart';
 import 'package:calorie_estimator/core/widgets/scan_meal_button.dart';
 import 'package:calorie_estimator/features/food_analysis/presentation/view_models/scan_session_view_model.dart';
 import 'package:calorie_estimator/features/history/domain/entities/meal_record.dart';
+import 'package:calorie_estimator/features/history/presentation/widgets/meal_subtitle.dart';
 import 'package:calorie_estimator/features/home/presentation/view_models/home_view_model.dart';
 import 'package:calorie_estimator/features/home/presentation/widgets/calorie_summary_card.dart';
 
@@ -146,7 +146,7 @@ class _TodaysMeals extends ConsumerWidget {
         for (final (index, meal) in meals.indexed)
           MealTile(
             title: meal.title,
-            subtitle: '${meal.mealType.label} · ${formatTime(meal.eatenAt)}',
+            subtitle: mealSubtitle(meal),
             calories: meal.totalCalories,
             thumbnail: switch (_thumbnails[index % _thumbnails.length]) {
               (final bg, final fg, final round) => MealThumbnail(
@@ -155,11 +155,12 @@ class _TodaysMeals extends ConsumerWidget {
                 round: round,
               ),
             },
-            onTap: () async {
-              await ref
+            onTap: () {
+              // The result screen shows a loader until the meal arrives.
+              ref
                   .read(scanSessionViewModelProvider.notifier)
                   .openSavedMeal(meal.id);
-              if (context.mounted) await context.push(AppRoutes.result);
+              context.push(AppRoutes.result);
             },
           ),
       ],

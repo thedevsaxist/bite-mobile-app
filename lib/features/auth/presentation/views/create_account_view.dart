@@ -14,7 +14,7 @@ import 'package:calorie_estimator/core/widgets/labeled_text_field.dart';
 import 'package:calorie_estimator/features/auth/presentation/view_models/create_account_view_model.dart';
 import 'package:calorie_estimator/features/auth/presentation/widgets/auth_widgets.dart';
 
-/// 02 Create account (optional), with a Sign up / Log in toggle.
+/// 02 Create account, with a Sign up / Log in toggle.
 class CreateAccountView extends ConsumerWidget {
   const CreateAccountView({super.key});
 
@@ -34,9 +34,9 @@ class CreateAccountView extends ConsumerWidget {
 
     Future<void> submit() async {
       TextInput.finishAutofillContext();
-      final success = await viewModel.submit();
-      if (!success || !context.mounted) return;
-      context.go(isSignUp ? AppRoutes.profileSetup : AppRoutes.home);
+      final result = await viewModel.submit();
+      if (result == null || !context.mounted) return;
+      context.go(result.isNewUser ? AppRoutes.profileSetup : AppRoutes.home);
     }
 
     return Scaffold(
@@ -53,7 +53,7 @@ class CreateAccountView extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               spacing: 28,
               children: [
-                const Align(
+                Align(
                   alignment: Alignment.centerLeft,
                   child: AppIconButton.back(),
                 ),

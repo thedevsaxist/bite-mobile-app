@@ -8,15 +8,15 @@ part of 'create_account_view_model.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// 02 Create account (optional) — sign up, with a toggle to log in instead.
+/// 02 Create account — sign up, with a toggle to log in instead.
 
 @ProviderFor(CreateAccountViewModel)
 final createAccountViewModelProvider = CreateAccountViewModelProvider._();
 
-/// 02 Create account (optional) — sign up, with a toggle to log in instead.
+/// 02 Create account — sign up, with a toggle to log in instead.
 final class CreateAccountViewModelProvider
     extends $NotifierProvider<CreateAccountViewModel, CreateAccountState> {
-  /// 02 Create account (optional) — sign up, with a toggle to log in instead.
+  /// 02 Create account — sign up, with a toggle to log in instead.
   CreateAccountViewModelProvider._()
     : super(
         from: null,
@@ -45,9 +45,9 @@ final class CreateAccountViewModelProvider
 }
 
 String _$createAccountViewModelHash() =>
-    r'2794c94d2de55dfc10e6d38d8a62f0739ae4ffe0';
+    r'a1d2c3c555a4409cc65d37b3a2aa8d35130c7492';
 
-/// 02 Create account (optional) — sign up, with a toggle to log in instead.
+/// 02 Create account — sign up, with a toggle to log in instead.
 
 abstract class _$CreateAccountViewModel extends $Notifier<CreateAccountState> {
   CreateAccountState build();

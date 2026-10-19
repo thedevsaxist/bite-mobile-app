@@ -16,6 +16,8 @@ class CalorieSummaryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final reference = summary.dailyReference;
+    final remaining = summary.remainingCalories;
 
     return Container(
       padding: const EdgeInsets.all(AppSpacing.lg),
@@ -28,9 +30,10 @@ class CalorieSummaryCard extends StatelessWidget {
         spacing: AppSpacing.lg,
         children: [
           Semantics(
-            label:
-                '${formatNumber(summary.eatenCalories)} of '
-                '${formatKcal(summary.dailyReference)} eaten',
+            label: reference == null
+                ? '${formatKcal(summary.eatenCalories)} eaten'
+                : '${formatNumber(summary.eatenCalories)} of '
+                      '${formatKcal(reference)} eaten',
             excludeSemantics: true,
             child: SizedBox.square(
               dimension: 128,
@@ -41,7 +44,7 @@ class CalorieSummaryCard extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        formatNumber(summary.remainingCalories),
+                        remaining == null ? '—' : formatNumber(remaining),
                         style: textTheme.headlineSmall,
                       ),
                       Text('kcal left', style: textTheme.labelSmall),
@@ -62,7 +65,8 @@ class CalorieSummaryCard extends StatelessWidget {
                 ),
                 _Total(
                   label: 'Daily reference',
-                  value: formatKcal(summary.dailyReference),
+                  // Not set until the user adds their details.
+                  value: reference == null ? '—' : formatKcal(reference),
                 ),
               ],
             ),

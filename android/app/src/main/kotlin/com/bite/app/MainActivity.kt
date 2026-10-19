@@ -1,4 +1,4 @@
-package com.iroezindu.calorie_estimator
+package com.bite.app
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -8,12 +8,13 @@ import 'package:calorie_estimator/core/theme/app_colors.dart';
 import 'package:calorie_estimator/core/theme/app_spacing.dart';
 import 'package:calorie_estimator/core/utils/formatters.dart';
 import 'package:calorie_estimator/core/widgets/app_icon_button.dart';
+import 'package:calorie_estimator/core/widgets/app_snack_bar.dart';
 import 'package:calorie_estimator/core/widgets/async_value_view.dart';
 import 'package:calorie_estimator/core/widgets/initials_avatar.dart';
 import 'package:calorie_estimator/core/widgets/section_label.dart';
 import 'package:calorie_estimator/features/profile/domain/entities/user_profile.dart';
 import 'package:calorie_estimator/features/settings/presentation/view_models/settings_view_model.dart';
-import 'package:calorie_estimator/core/theme/app_icons.dart';
+import 'package:uicons/uicons.dart';
 
 /// 12 Profile & settings.
 class SettingsView extends ConsumerWidget {
@@ -24,6 +25,13 @@ class SettingsView extends ConsumerWidget {
     final settings = ref.watch(settingsViewModelProvider);
     final viewModel = ref.read(settingsViewModelProvider.notifier);
     final textTheme = Theme.of(context).textTheme;
+
+    ref.listen(settingsViewModelProvider.select((s) => s.value?.errorMessage), (
+      _,
+      message,
+    ) {
+      if (message != null) showAppSnackBar(context, message);
+    });
 
     Future<void> logOut() async {
       final signedOut = await viewModel.logOut();
@@ -46,7 +54,7 @@ class SettingsView extends ConsumerWidget {
               child: Row(
                 spacing: AppSpacing.sm,
                 children: [
-                  const AppIconButton.back(style: AppIconButtonStyle.outlined),
+                  AppIconButton.back(style: AppIconButtonStyle.outlined),
                   Text(
                     'Profile & settings',
                     style: textTheme.headlineSmall?.copyWith(fontSize: 22),
@@ -65,7 +73,7 @@ class SettingsView extends ConsumerWidget {
                   ),
                   children: [
                     _AccountCard(
-                      name: state.user.fullName,
+                      name: state.user.displayName,
                       email: state.user.email,
                     ),
                     const SizedBox(height: 18),
@@ -108,7 +116,7 @@ class SettingsView extends ConsumerWidget {
                       minimumSize: const Size(0, 48),
                       textStyle: textTheme.labelLarge,
                     ),
-                    icon: const Icon(AppIcons.logOut, size: 20),
+                    icon: Icon(UIcons.regularRounded.exit, size: 20),
                     label: const Text('Log out'),
                   ),
                   Text(

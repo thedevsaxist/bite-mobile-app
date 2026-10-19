@@ -9,8 +9,8 @@ import 'package:calorie_estimator/core/widgets/app_buttons.dart';
 import 'package:calorie_estimator/core/widgets/app_icon_button.dart';
 import 'package:calorie_estimator/core/widgets/fill_scroll_view.dart';
 import 'package:calorie_estimator/core/widgets/labeled_text_field.dart';
+import 'package:calorie_estimator/core/widgets/meal_photo.dart';
 import 'package:calorie_estimator/core/widgets/option_button.dart';
-import 'package:calorie_estimator/core/widgets/plate_illustration.dart';
 import 'package:calorie_estimator/features/food_analysis/domain/entities/food_analysis.dart';
 import 'package:calorie_estimator/features/food_analysis/presentation/view_models/scan_session_view_model.dart';
 
@@ -25,11 +25,7 @@ class MealDetailsView extends ConsumerWidget {
     final textTheme = Theme.of(context).textTheme;
 
     void analyse({bool skipDetails = false}) {
-      if (skipDetails) {
-        viewModel
-          ..setDescription('')
-          ..setNotes('');
-      }
+      if (skipDetails) viewModel.skipDetails();
       context.push(AppRoutes.analysing);
     }
 
@@ -49,7 +45,7 @@ class MealDetailsView extends ConsumerWidget {
               Row(
                 spacing: AppSpacing.sm,
                 children: [
-                  const AppIconButton.back(semanticLabel: 'Back to camera'),
+                  AppIconButton.back(semanticLabel: 'Back to camera'),
                   Text(
                     'Your photo',
                     style: textTheme.titleMedium?.copyWith(
@@ -59,8 +55,8 @@ class MealDetailsView extends ConsumerWidget {
                   ),
                 ],
               ),
-              // TODO: show Image.file(state.imagePath) once capture is wired.
-              MealPhotoPlaceholder(
+              MealPhoto(
+                filePath: state.imagePath,
                 height: 168,
                 plateSize: 136,
                 borderRadius: BorderRadius.circular(20),

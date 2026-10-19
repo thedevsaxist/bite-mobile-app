@@ -8,18 +8,18 @@ part of 'edit_item_view_model.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// 09 Edit item — the bottom sheet for correcting one recognised food.
+/// 09 Edit item — the bottom sheet for correcting one food.
 
 @ProviderFor(EditItemViewModel)
 final editItemViewModelProvider = EditItemViewModelFamily._();
 
-/// 09 Edit item — the bottom sheet for correcting one recognised food.
+/// 09 Edit item — the bottom sheet for correcting one food.
 final class EditItemViewModelProvider
     extends $NotifierProvider<EditItemViewModel, EditItemState> {
-  /// 09 Edit item — the bottom sheet for correcting one recognised food.
+  /// 09 Edit item — the bottom sheet for correcting one food.
   EditItemViewModelProvider._({
     required EditItemViewModelFamily super.from,
-    required RecognisedFoodItem super.argument,
+    required MealItem super.argument,
   }) : super(
          retry: null,
          name: r'editItemViewModelProvider',
@@ -61,9 +61,9 @@ final class EditItemViewModelProvider
   }
 }
 
-String _$editItemViewModelHash() => r'8ff0fd37fcde7d38724c06f2e96d7df6dae29695';
+String _$editItemViewModelHash() => r'56469128dcf8fa0ebcd1b14d943d30db3d26384a';
 
-/// 09 Edit item — the bottom sheet for correcting one recognised food.
+/// 09 Edit item — the bottom sheet for correcting one food.
 
 final class EditItemViewModelFamily extends $Family
     with
@@ -72,7 +72,7 @@ final class EditItemViewModelFamily extends $Family
           EditItemState,
           EditItemState,
           EditItemState,
-          RecognisedFoodItem
+          MealItem
         > {
   EditItemViewModelFamily._()
     : super(
@@ -83,22 +83,22 @@ final class EditItemViewModelFamily extends $Family
         isAutoDispose: true,
       );
 
-  /// 09 Edit item — the bottom sheet for correcting one recognised food.
+  /// 09 Edit item — the bottom sheet for correcting one food.
 
-  EditItemViewModelProvider call(RecognisedFoodItem item) =>
+  EditItemViewModelProvider call(MealItem item) =>
       EditItemViewModelProvider._(argument: item, from: this);
 
   @override
   String toString() => r'editItemViewModelProvider';
 }
 
-/// 09 Edit item — the bottom sheet for correcting one recognised food.
+/// 09 Edit item — the bottom sheet for correcting one food.
 
 abstract class _$EditItemViewModel extends $Notifier<EditItemState> {
-  late final _$args = ref.$arg as RecognisedFoodItem;
-  RecognisedFoodItem get item => _$args;
+  late final _$args = ref.$arg as MealItem;
+  MealItem get item => _$args;
 
-  EditItemState build(RecognisedFoodItem item);
+  EditItemState build(MealItem item);
   @$mustCallSuper
   @override
   WhenComplete runBuild() {

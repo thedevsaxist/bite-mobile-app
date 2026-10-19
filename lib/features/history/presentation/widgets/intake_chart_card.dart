@@ -11,8 +11,11 @@ import 'package:calorie_estimator/features/history/domain/entities/meal_record.d
 
 /// Daily average plus a bar per day against the dashed reference line.
 ///
-/// Bars above the reference are orange; today's (still in progress) is a
-/// lighter green.
+/// Bars above the reference are orange; today's (still in progress) is
+/// lighter. Without a reference (no profile yet) there is no line.
+///
+/// A week shows a label under every bar; a month labels every seventh day
+/// back from today.
 class IntakeChartCard extends StatelessWidget {
   const IntakeChartCard({
     required this.days,
@@ -24,13 +27,17 @@ class IntakeChartCard extends StatelessWidget {
 
   final List<DailyIntake> days;
   final int dailyAverage;
-  final int dailyReference;
+  final int? dailyReference;
   final String rangeLabel;
+
+  bool _isAbove(DailyIntake day) =>
+      dailyReference != null && day.calories > dailyReference!;
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    final aboveDays = days.where((d) => d.calories > dailyReference).toList();
+    final aboveDays = days.where(_isAbove).toList();
+    final reference = dailyReference;
 
     return Container(
       padding: const EdgeInsets.all(18),
@@ -64,12 +71,13 @@ class IntakeChartCard extends StatelessWidget {
                   ],
                 ),
               ),
-              Text(
-                'Reference ${formatNumber(dailyReference)}',
-                style: textTheme.bodySmall?.copyWith(
-                  fontWeight: FontWeight.w600,
+              if (reference != null)
+                Text(
+                  'Reference ${formatNumber(reference)}',
+                  style: textTheme.bodySmall?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ),
             ],
           ),
           Semantics(
@@ -77,29 +85,30 @@ class IntakeChartCard extends StatelessWidget {
             excludeSemantics: true,
             child: SizedBox(height: 164, child: _buildChart(textTheme)),
           ),
-          Wrap(
-            spacing: 14,
-            runSpacing: AppSpacing.xxs,
-            children: [
-              _LegendItem(
-                swatch: const _DashSwatch(),
-                label: 'Your reference',
-                style: textTheme.labelSmall,
-              ),
-              _LegendItem(
-                swatch: Container(
-                  width: 10,
-                  height: 10,
-                  decoration: BoxDecoration(
-                    color: AppColors.chartAboveReference,
-                    borderRadius: BorderRadius.circular(3),
-                  ),
+          if (reference != null)
+            Wrap(
+              spacing: 14,
+              runSpacing: AppSpacing.xxs,
+              children: [
+                _LegendItem(
+                  swatch: const _DashSwatch(),
+                  label: 'Your reference',
+                  style: textTheme.labelSmall,
                 ),
-                label: 'Above reference',
-                style: textTheme.labelSmall,
-              ),
-            ],
-          ),
+                _LegendItem(
+                  swatch: Container(
+                    width: 10,
+                    height: 10,
+                    decoration: BoxDecoration(
+                      color: AppColors.chartAboveReference,
+                      borderRadius: BorderRadius.circular(3),
+                    ),
+                  ),
+                  label: 'Above reference',
+                  style: textTheme.labelSmall,
+                ),
+              ],
+            ),
         ],
       ),
     );
@@ -107,8 +116,11 @@ class IntakeChartCard extends StatelessWidget {
 
   Widget _buildChart(TextTheme textTheme) {
     final maxCalories = days.fold(0, (m, d) => math.max(m, d.calories));
-    final maxY = math.max(maxCalories, dailyReference) * 1.08;
+    // An empty range still gets a sensible scale.
+    final maxY =
+        math.max(math.max(maxCalories, dailyReference ?? 0), 500) * 1.08;
     final todayIndex = days.length - 1;
+    final isMonth = days.length > 7;
 
     return BarChart(
       BarChartData(
@@ -123,12 +135,13 @@ class IntakeChartCard extends StatelessWidget {
         ),
         extraLinesData: ExtraLinesData(
           horizontalLines: [
-            HorizontalLine(
-              y: dailyReference.toDouble(),
-              color: AppColors.textPlaceholder,
-              strokeWidth: 2,
-              dashArray: [6, 4],
-            ),
+            if (dailyReference case final reference?)
+              HorizontalLine(
+                y: reference.toDouble(),
+                color: AppColors.textPlaceholder,
+                strokeWidth: 2,
+                dashArray: [6, 4],
+              ),
           ],
         ),
         titlesData: FlTitlesData(
@@ -142,11 +155,18 @@ class IntakeChartCard extends StatelessWidget {
               getTitlesWidget: (value, meta) {
                 final index = value.toInt();
                 final isToday = index == todayIndex;
+                if (isMonth && (todayIndex - index) % 7 != 0) {
+                  return const SizedBox.shrink();
+                }
                 return SideTitleWidget(
                   meta: meta,
                   space: 6,
                   child: Text(
-                    isToday ? 'Today' : DateFormat.E().format(days[index].date),
+                    switch (days[index].date) {
+                      _ when isToday => 'Today',
+                      final date when isMonth => formatShortDate(date),
+                      final date => DateFormat.E().format(date),
+                    },
                     style: textTheme.labelSmall?.copyWith(
                       color: isToday ? AppColors.textPrimary : null,
                       fontWeight: isToday ? FontWeight.w800 : null,
@@ -164,11 +184,10 @@ class IntakeChartCard extends StatelessWidget {
               barRods: [
                 BarChartRodData(
                   toY: day.calories.toDouble(),
-                  width: 28,
+                  width: isMonth ? 6 : 28,
                   color: switch (day) {
                     _ when index == todayIndex => AppColors.chartInProgress,
-                    _ when day.calories > dailyReference =>
-                      AppColors.chartAboveReference,
+                    _ when _isAbove(day) => AppColors.chartAboveReference,
                     _ => AppColors.primary,
                   },
                   borderRadius: const BorderRadius.vertical(

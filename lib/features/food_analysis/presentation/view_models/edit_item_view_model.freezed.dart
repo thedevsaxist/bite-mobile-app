@@ -15,7 +15,11 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$EditItemState {
 
- String get name; double get quantity; PortionUnit get unit; double get caloriesPerUnit;
+ String get name; double get quantity; PortionUnit get unit;/// The reference food the nutrients come from; null when unmatched.
+ FoodReference? get reference;/// [reference]'s values, loaded for the estimate preview.
+ NutritionFood? get food;/// Reference foods matching what the user typed.
+ List<NutritionFood> get suggestions;/// The nutrients the item had when the sheet opened, for scaling.
+ Nutrients? get originalNutrients; double? get originalQuantity; PortionUnit? get originalUnit;
 /// Create a copy of EditItemState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -27,20 +31,20 @@ $EditItemStateCopyWith<EditItemState> get copyWith => _$EditItemStateCopyWithImp
 @override
 bool operator ==(Object other) {
   final _this = this as EditItemState;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is EditItemState&&(identical(other.name, _this.name) || other.name == _this.name)&&(identical(other.quantity, _this.quantity) || other.quantity == _this.quantity)&&(identical(other.unit, _this.unit) || other.unit == _this.unit)&&(identical(other.caloriesPerUnit, _this.caloriesPerUnit) || other.caloriesPerUnit == _this.caloriesPerUnit));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is EditItemState&&(identical(other.name, _this.name) || other.name == _this.name)&&(identical(other.quantity, _this.quantity) || other.quantity == _this.quantity)&&(identical(other.unit, _this.unit) || other.unit == _this.unit)&&(identical(other.reference, _this.reference) || other.reference == _this.reference)&&(identical(other.food, _this.food) || other.food == _this.food)&&const DeepCollectionEquality().equals(other.suggestions, _this.suggestions)&&(identical(other.originalNutrients, _this.originalNutrients) || other.originalNutrients == _this.originalNutrients)&&(identical(other.originalQuantity, _this.originalQuantity) || other.originalQuantity == _this.originalQuantity)&&(identical(other.originalUnit, _this.originalUnit) || other.originalUnit == _this.originalUnit));
 }
 
 
 @override
 int get hashCode {
   final _this = this as EditItemState;
-  return Object.hash(runtimeType,_this.name,_this.quantity,_this.unit,_this.caloriesPerUnit);
+  return Object.hash(runtimeType,_this.name,_this.quantity,_this.unit,_this.reference,_this.food,const DeepCollectionEquality().hash(_this.suggestions),_this.originalNutrients,_this.originalQuantity,_this.originalUnit);
 }
 
 @override
 String toString() {
   final _this = this as EditItemState;
-  return 'EditItemState(name: ${_this.name}, quantity: ${_this.quantity}, unit: ${_this.unit}, caloriesPerUnit: ${_this.caloriesPerUnit})';
+  return 'EditItemState(name: ${_this.name}, quantity: ${_this.quantity}, unit: ${_this.unit}, reference: ${_this.reference}, food: ${_this.food}, suggestions: ${_this.suggestions}, originalNutrients: ${_this.originalNutrients}, originalQuantity: ${_this.originalQuantity}, originalUnit: ${_this.originalUnit})';
 }
 
 
@@ -51,11 +55,11 @@ abstract mixin class $EditItemStateCopyWith<$Res>  {
   factory $EditItemStateCopyWith(EditItemState value, $Res Function(EditItemState) _then) = _$EditItemStateCopyWithImpl;
 @useResult
 $Res call({
- String name, double quantity, PortionUnit unit, double caloriesPerUnit
+ String name, double quantity, PortionUnit unit, FoodReference? reference, NutritionFood? food, List<NutritionFood> suggestions, Nutrients? originalNutrients, double? originalQuantity, PortionUnit? originalUnit
 });
 
 
-
+$FoodReferenceCopyWith<$Res>? get reference;$NutritionFoodCopyWith<$Res>? get food;$NutrientsCopyWith<$Res>? get originalNutrients;
 
 }
 /// @nodoc
@@ -68,16 +72,57 @@ class _$EditItemStateCopyWithImpl<$Res>
 
 /// Create a copy of EditItemState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? quantity = null,Object? unit = null,Object? caloriesPerUnit = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? quantity = null,Object? unit = null,Object? reference = freezed,Object? food = freezed,Object? suggestions = null,Object? originalNutrients = freezed,Object? originalQuantity = freezed,Object? originalUnit = freezed,}) {
   return _then(EditItemState(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,quantity: null == quantity ? _self.quantity : quantity // ignore: cast_nullable_to_non_nullable
 as double,unit: null == unit ? _self.unit : unit // ignore: cast_nullable_to_non_nullable
-as PortionUnit,caloriesPerUnit: null == caloriesPerUnit ? _self.caloriesPerUnit : caloriesPerUnit // ignore: cast_nullable_to_non_nullable
-as double,
+as PortionUnit,reference: freezed == reference ? _self.reference : reference // ignore: cast_nullable_to_non_nullable
+as FoodReference?,food: freezed == food ? _self.food : food // ignore: cast_nullable_to_non_nullable
+as NutritionFood?,suggestions: null == suggestions ? _self.suggestions : suggestions // ignore: cast_nullable_to_non_nullable
+as List<NutritionFood>,originalNutrients: freezed == originalNutrients ? _self.originalNutrients : originalNutrients // ignore: cast_nullable_to_non_nullable
+as Nutrients?,originalQuantity: freezed == originalQuantity ? _self.originalQuantity : originalQuantity // ignore: cast_nullable_to_non_nullable
+as double?,originalUnit: freezed == originalUnit ? _self.originalUnit : originalUnit // ignore: cast_nullable_to_non_nullable
+as PortionUnit?,
   ));
 }
+/// Create a copy of EditItemState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$FoodReferenceCopyWith<$Res>? get reference {
+    if (_self.reference == null) {
+    return null;
+  }
 
+  return $FoodReferenceCopyWith<$Res>(_self.reference!, (value) {
+    return _then(_self.copyWith(reference: value));
+  });
+}/// Create a copy of EditItemState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$NutritionFoodCopyWith<$Res>? get food {
+    if (_self.food == null) {
+    return null;
+  }
+
+  return $NutritionFoodCopyWith<$Res>(_self.food!, (value) {
+    return _then(_self.copyWith(food: value));
+  });
+}/// Create a copy of EditItemState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$NutrientsCopyWith<$Res>? get originalNutrients {
+    if (_self.originalNutrients == null) {
+    return null;
+  }
+
+  return $NutrientsCopyWith<$Res>(_self.originalNutrients!, (value) {
+    return _then(_self.copyWith(originalNutrients: value));
+  });
+}
 }
 
 
@@ -159,10 +204,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name,  double quantity,  PortionUnit unit,  double caloriesPerUnit)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name,  double quantity,  PortionUnit unit,  FoodReference? reference,  NutritionFood? food,  List<NutritionFood> suggestions,  Nutrients? originalNutrients,  double? originalQuantity,  PortionUnit? originalUnit)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _EditItemState() when $default != null:
-return $default(_that.name,_that.quantity,_that.unit,_that.caloriesPerUnit);case _:
+return $default(_that.name,_that.quantity,_that.unit,_that.reference,_that.food,_that.suggestions,_that.originalNutrients,_that.originalQuantity,_that.originalUnit);case _:
   return orElse();
 
 }
@@ -180,10 +225,10 @@ return $default(_that.name,_that.quantity,_that.unit,_that.caloriesPerUnit);case
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name,  double quantity,  PortionUnit unit,  double caloriesPerUnit)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name,  double quantity,  PortionUnit unit,  FoodReference? reference,  NutritionFood? food,  List<NutritionFood> suggestions,  Nutrients? originalNutrients,  double? originalQuantity,  PortionUnit? originalUnit)  $default,) {final _that = this;
 switch (_that) {
 case _EditItemState():
-return $default(_that.name,_that.quantity,_that.unit,_that.caloriesPerUnit);case _:
+return $default(_that.name,_that.quantity,_that.unit,_that.reference,_that.food,_that.suggestions,_that.originalNutrients,_that.originalQuantity,_that.originalUnit);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -200,10 +245,10 @@ return $default(_that.name,_that.quantity,_that.unit,_that.caloriesPerUnit);case
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name,  double quantity,  PortionUnit unit,  double caloriesPerUnit)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name,  double quantity,  PortionUnit unit,  FoodReference? reference,  NutritionFood? food,  List<NutritionFood> suggestions,  Nutrients? originalNutrients,  double? originalQuantity,  PortionUnit? originalUnit)?  $default,) {final _that = this;
 switch (_that) {
 case _EditItemState() when $default != null:
-return $default(_that.name,_that.quantity,_that.unit,_that.caloriesPerUnit);case _:
+return $default(_that.name,_that.quantity,_that.unit,_that.reference,_that.food,_that.suggestions,_that.originalNutrients,_that.originalQuantity,_that.originalUnit);case _:
   return null;
 
 }
@@ -215,13 +260,29 @@ return $default(_that.name,_that.quantity,_that.unit,_that.caloriesPerUnit);case
 
 
 class _EditItemState extends EditItemState {
-  const _EditItemState({required this.name, required this.quantity, required this.unit, required this.caloriesPerUnit}): super._();
+  const _EditItemState({required this.name, required this.quantity, required this.unit, this.reference, this.food,  List<NutritionFood> suggestions = const [], this.originalNutrients, this.originalQuantity, this.originalUnit}): _suggestions = suggestions,super._();
   
 
 @override final  String name;
 @override final  double quantity;
 @override final  PortionUnit unit;
-@override final  double caloriesPerUnit;
+/// The reference food the nutrients come from; null when unmatched.
+@override final  FoodReference? reference;
+/// [reference]'s values, loaded for the estimate preview.
+@override final  NutritionFood? food;
+/// Reference foods matching what the user typed.
+ final  List<NutritionFood> _suggestions;
+/// Reference foods matching what the user typed.
+@override@JsonKey() List<NutritionFood> get suggestions {
+  if (_suggestions is EqualUnmodifiableListView) return _suggestions;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_suggestions);
+}
+
+/// The nutrients the item had when the sheet opened, for scaling.
+@override final  Nutrients? originalNutrients;
+@override final  double? originalQuantity;
+@override final  PortionUnit? originalUnit;
 
 /// Create a copy of EditItemState
 /// with the given fields replaced by the non-null parameter values.
@@ -233,18 +294,18 @@ _$EditItemStateCopyWith<_EditItemState> get copyWith => __$EditItemStateCopyWith
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _EditItemState&&(identical(other.name, name) || other.name == name)&&(identical(other.quantity, quantity) || other.quantity == quantity)&&(identical(other.unit, unit) || other.unit == unit)&&(identical(other.caloriesPerUnit, caloriesPerUnit) || other.caloriesPerUnit == caloriesPerUnit));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _EditItemState&&(identical(other.name, name) || other.name == name)&&(identical(other.quantity, quantity) || other.quantity == quantity)&&(identical(other.unit, unit) || other.unit == unit)&&(identical(other.reference, reference) || other.reference == reference)&&(identical(other.food, food) || other.food == food)&&const DeepCollectionEquality().equals(other.suggestions, _suggestions)&&(identical(other.originalNutrients, originalNutrients) || other.originalNutrients == originalNutrients)&&(identical(other.originalQuantity, originalQuantity) || other.originalQuantity == originalQuantity)&&(identical(other.originalUnit, originalUnit) || other.originalUnit == originalUnit));
 }
 
 
 @override
 int get hashCode {
-    return Object.hash(runtimeType,name,quantity,unit,caloriesPerUnit);
+    return Object.hash(runtimeType,name,quantity,unit,reference,food,const DeepCollectionEquality().hash(_suggestions),originalNutrients,originalQuantity,originalUnit);
 }
 
 @override
 String toString() {
-    return 'EditItemState(name: $name, quantity: $quantity, unit: $unit, caloriesPerUnit: $caloriesPerUnit)';
+    return 'EditItemState(name: $name, quantity: $quantity, unit: $unit, reference: $reference, food: $food, suggestions: $suggestions, originalNutrients: $originalNutrients, originalQuantity: $originalQuantity, originalUnit: $originalUnit)';
 }
 
 
@@ -255,11 +316,11 @@ abstract mixin class _$EditItemStateCopyWith<$Res> implements $EditItemStateCopy
   factory _$EditItemStateCopyWith(_EditItemState value, $Res Function(_EditItemState) _then) = __$EditItemStateCopyWithImpl;
 @override @useResult
 $Res call({
- String name, double quantity, PortionUnit unit, double caloriesPerUnit
+ String name, double quantity, PortionUnit unit, FoodReference? reference, NutritionFood? food, List<NutritionFood> suggestions, Nutrients? originalNutrients, double? originalQuantity, PortionUnit? originalUnit
 });
 
 
-
+@override $FoodReferenceCopyWith<$Res>? get reference;@override $NutritionFoodCopyWith<$Res>? get food;@override $NutrientsCopyWith<$Res>? get originalNutrients;
 
 }
 /// @nodoc
@@ -272,17 +333,58 @@ class __$EditItemStateCopyWithImpl<$Res>
 
 /// Create a copy of EditItemState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? quantity = null,Object? unit = null,Object? caloriesPerUnit = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? quantity = null,Object? unit = null,Object? reference = freezed,Object? food = freezed,Object? suggestions = null,Object? originalNutrients = freezed,Object? originalQuantity = freezed,Object? originalUnit = freezed,}) {
   return _then(_EditItemState(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,quantity: null == quantity ? _self.quantity : quantity // ignore: cast_nullable_to_non_nullable
 as double,unit: null == unit ? _self.unit : unit // ignore: cast_nullable_to_non_nullable
-as PortionUnit,caloriesPerUnit: null == caloriesPerUnit ? _self.caloriesPerUnit : caloriesPerUnit // ignore: cast_nullable_to_non_nullable
-as double,
+as PortionUnit,reference: freezed == reference ? _self.reference : reference // ignore: cast_nullable_to_non_nullable
+as FoodReference?,food: freezed == food ? _self.food : food // ignore: cast_nullable_to_non_nullable
+as NutritionFood?,suggestions: null == suggestions ? _self._suggestions : suggestions // ignore: cast_nullable_to_non_nullable
+as List<NutritionFood>,originalNutrients: freezed == originalNutrients ? _self.originalNutrients : originalNutrients // ignore: cast_nullable_to_non_nullable
+as Nutrients?,originalQuantity: freezed == originalQuantity ? _self.originalQuantity : originalQuantity // ignore: cast_nullable_to_non_nullable
+as double?,originalUnit: freezed == originalUnit ? _self.originalUnit : originalUnit // ignore: cast_nullable_to_non_nullable
+as PortionUnit?,
   ));
 }
 
+/// Create a copy of EditItemState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$FoodReferenceCopyWith<$Res>? get reference {
+    if (_self.reference == null) {
+    return null;
+  }
 
+  return $FoodReferenceCopyWith<$Res>(_self.reference!, (value) {
+    return _then(_self.copyWith(reference: value));
+  });
+}/// Create a copy of EditItemState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$NutritionFoodCopyWith<$Res>? get food {
+    if (_self.food == null) {
+    return null;
+  }
+
+  return $NutritionFoodCopyWith<$Res>(_self.food!, (value) {
+    return _then(_self.copyWith(food: value));
+  });
+}/// Create a copy of EditItemState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$NutrientsCopyWith<$Res>? get originalNutrients {
+    if (_self.originalNutrients == null) {
+    return null;
+  }
+
+  return $NutrientsCopyWith<$Res>(_self.originalNutrients!, (value) {
+    return _then(_self.copyWith(originalNutrients: value));
+  });
+}
 }
 
 // dart format on

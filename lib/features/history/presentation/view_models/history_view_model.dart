@@ -1,19 +1,27 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import 'package:calorie_estimator/core/utils/formatters.dart';
 import 'package:calorie_estimator/features/history/domain/entities/meal_record.dart';
+import 'package:calorie_estimator/features/history/domain/usecases/get_intake_summary_usecase.dart';
+import 'package:calorie_estimator/features/history/domain/usecases/get_meals_usecase.dart';
+import 'package:calorie_estimator/features/history/presentation/view_models/meal_changes.dart';
+import 'package:calorie_estimator/features/profile/presentation/view_models/profile_changes.dart';
 
 part 'history_view_model.freezed.dart';
 part 'history_view_model.g.dart';
 
 enum HistoryPeriod {
-  day('Day'),
-  week('Week'),
-  month('Month');
+  day('Day', 1),
+  week('Week', 7),
+  month('Month', 30);
 
-  const HistoryPeriod(this.label);
+  const HistoryPeriod(this.label, this.days);
 
   final String label;
+
+  /// Calendar days covered, ending today.
+  final int days;
 }
 
 /// Meals eaten on one day, under a heading like "Today · 1,240 kcal".
@@ -21,6 +29,8 @@ enum HistoryPeriod {
 abstract class MealDayGroup with _$MealDayGroup {
   const factory MealDayGroup({
     required String label,
+
+    /// Disputed meals aren't counted, as in the summaries.
     required int totalCalories,
     required List<MealRecord> meals,
   }) = _MealDayGroup;
@@ -31,8 +41,12 @@ abstract class HistoryState with _$HistoryState {
   const factory HistoryState({
     required HistoryPeriod period,
     required String rangeLabel,
+
+    /// Over the days with at least one meal.
     required int dailyAverage,
-    required int dailyReference,
+
+    /// Today's reference; null without a profile.
+    int? dailyReference,
     required List<DailyIntake> days,
     required List<MealDayGroup> groups,
   }) = _HistoryState;
@@ -41,74 +55,75 @@ abstract class HistoryState with _$HistoryState {
 /// 11 History.
 @riverpod
 class HistoryViewModel extends _$HistoryViewModel {
+  HistoryPeriod _period = HistoryPeriod.week;
+
   @override
-  Future<HistoryState> build() async => _load(HistoryPeriod.week);
+  Future<HistoryState> build() async {
+    // Reload when a meal or the daily reference changes.
+    ref
+      ..watch(mealChangesProvider)
+      ..watch(profileChangesProvider);
+    return _load(_period);
+  }
 
   Future<void> setPeriod(HistoryPeriod period) async {
-    if (state.value?.period == period) return;
+    if (_period == period && state.hasValue) return;
+    _period = period;
     // Riverpod keeps the previous data while loading, so the chart stays up.
     state = const AsyncLoading();
     state = await AsyncValue.guard(() => _load(period));
   }
 
   Future<HistoryState> _load(HistoryPeriod period) async {
-    // TODO: fetch via GetIntakeHistoryUseCase(period). The sample week below
-    // matches the design and is returned for every period for now.
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
-    DateTime at(DateTime day, int hour, int minute) =>
-        DateTime(day.year, day.month, day.day, hour, minute);
-    final yesterday = today.subtract(const Duration(days: 1));
+    final from = today.subtract(Duration(days: period.days - 1));
+    final endOfToday = today.add(const Duration(days: 1));
 
-    const weekCalories = [2070, 1900, 2310, 1780, 2140, 1750, 1240];
+    final (summaryResult, mealsResult) = await (
+      ref.read(getIntakeSummaryUseCaseProvider).call((from: from, to: today)),
+      ref.read(getMealsUseCaseProvider).call((from: from, to: endOfToday)),
+    ).wait;
+    final summary = summaryResult.getOrElse((failure) => throw failure);
+    final meals = mealsResult.getOrElse((failure) => throw failure);
 
     return HistoryState(
       period: period,
-      rangeLabel: '10–16 Oct',
-      dailyAverage: 1871,
-      dailyReference: 2150,
+      rangeLabel: formatDateRange(from, today),
+      dailyAverage: summary.averagePerLoggedDay.calories.round(),
+      dailyReference: summary.days.lastOrNull?.dailyCalorieReference,
       days: [
-        for (final (i, kcal) in weekCalories.indexed)
-          DailyIntake(
-            date: today.subtract(Duration(days: weekCalories.length - 1 - i)),
-            calories: kcal,
-          ),
+        for (final day in summary.days)
+          DailyIntake(date: day.date, calories: day.totals.calories.round()),
       ],
-      groups: [
-        MealDayGroup(
-          label: 'Today',
-          totalCalories: 1240,
-          meals: [
-            MealRecord(
-              id: 'sample-lunch',
-              title: 'Jollof rice, plantain, chicken',
-              mealType: MealType.lunch,
-              eatenAt: at(today, 13, 20),
-              totalCalories: 860,
-            ),
-            MealRecord(
-              id: 'sample-breakfast',
-              title: 'Akara and pap',
-              mealType: MealType.breakfast,
-              eatenAt: at(today, 8, 5),
-              totalCalories: 380,
-            ),
-          ],
-        ),
-        MealDayGroup(
-          label: 'Yesterday',
-          totalCalories: 1730,
-          meals: [
-            MealRecord(
-              id: 'sample-dinner',
-              title: 'Egusi soup and eba',
-              mealType: MealType.dinner,
-              eatenAt: at(yesterday, 19, 40),
-              totalCalories: 720,
-            ),
-          ],
-        ),
-      ],
+      groups: _groupByDay(meals, today),
     );
+  }
+
+  /// Newest day first, as the meals arrive.
+  static List<MealDayGroup> _groupByDay(
+    List<MealRecord> meals,
+    DateTime today,
+  ) {
+    final byDay = <DateTime, List<MealRecord>>{};
+    for (final meal in meals) {
+      final eaten = meal.eatenAt;
+      (byDay[DateTime(eaten.year, eaten.month, eaten.day)] ??= []).add(meal);
+    }
+    final yesterday = today.subtract(const Duration(days: 1));
+    return [
+      for (final MapEntry(key: day, value: dayMeals) in byDay.entries)
+        MealDayGroup(
+          label: switch (day) {
+            _ when day == today => 'Today',
+            _ when day == yesterday => 'Yesterday',
+            _ => formatDayHeading(day),
+          },
+          totalCalories: dayMeals
+              .where((meal) => !meal.isDisputed)
+              .fold(0, (sum, meal) => sum + meal.totalCalories),
+          meals: dayMeals,
+        ),
+    ];
   }
 }

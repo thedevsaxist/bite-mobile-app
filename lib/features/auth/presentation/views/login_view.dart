@@ -7,11 +7,13 @@ import 'package:calorie_estimator/app/router/app_routes.dart';
 import 'package:calorie_estimator/core/constants/app_constants.dart';
 import 'package:calorie_estimator/core/theme/app_colors.dart';
 import 'package:calorie_estimator/core/theme/app_spacing.dart';
+import 'package:calorie_estimator/core/utils/platform.dart';
 import 'package:calorie_estimator/core/widgets/app_buttons.dart';
 import 'package:calorie_estimator/core/widgets/app_icon_button.dart';
 import 'package:calorie_estimator/core/widgets/app_snack_bar.dart';
 import 'package:calorie_estimator/core/widgets/fill_scroll_view.dart';
 import 'package:calorie_estimator/core/widgets/labeled_text_field.dart';
+import 'package:calorie_estimator/features/auth/domain/entities/sign_in_result.dart';
 import 'package:calorie_estimator/features/auth/presentation/view_models/login_view_model.dart';
 import 'package:calorie_estimator/features/auth/presentation/widgets/auth_widgets.dart';
 
@@ -32,9 +34,10 @@ class LoginView extends ConsumerWidget {
       if (message != null) showAppSnackBar(context, message);
     });
 
-    Future<void> signIn(Future<bool> Function() action) async {
-      final success = await action();
-      if (success && context.mounted) context.go(AppRoutes.home);
+    Future<void> signIn(Future<SignInResult?> Function() action) async {
+      final result = await action();
+      if (result == null || !context.mounted) return;
+      context.go(result.isNewUser ? AppRoutes.profileSetup : AppRoutes.home);
     }
 
     return Scaffold(
@@ -51,9 +54,14 @@ class LoginView extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               spacing: AppSpacing.xl,
               children: [
-                const Align(
+                Align(
                   alignment: Alignment.centerLeft,
-                  child: AppIconButton.back(),
+                  // Start-up opens Log in directly for returning users.
+                  child: AppIconButton.back(
+                    onPressed: context.canPop()
+                        ? null
+                        : () => context.go(AppRoutes.welcome),
+                  ),
                 ),
                 const AuthHeader(
                   title: 'Welcome back',
@@ -63,10 +71,13 @@ class LoginView extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   spacing: AppSpacing.sm,
                   children: [
-                    SocialSignInButton(
-                      provider: SocialProvider.apple,
-                      onPressed: () => signIn(viewModel.continueWithApple),
-                    ),
+                    // Sign in with Apple needs a web redirect flow on
+                    // Android, which the backend doesn't offer.
+                    if (isCupertinoPlatform(context))
+                      SocialSignInButton(
+                        provider: SocialProvider.apple,
+                        onPressed: () => signIn(viewModel.continueWithApple),
+                      ),
                     SocialSignInButton(
                       provider: SocialProvider.google,
                       onPressed: () => signIn(viewModel.continueWithGoogle),

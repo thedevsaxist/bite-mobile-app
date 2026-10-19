@@ -6,10 +6,11 @@ import 'package:calorie_estimator/app/router/app_routes.dart';
 import 'package:calorie_estimator/core/theme/app_colors.dart';
 import 'package:calorie_estimator/core/theme/app_spacing.dart';
 import 'package:calorie_estimator/core/widgets/app_buttons.dart';
-import 'package:calorie_estimator/core/widgets/plate_illustration.dart';
+import 'package:calorie_estimator/core/widgets/app_snack_bar.dart';
+import 'package:calorie_estimator/core/widgets/meal_photo.dart';
 import 'package:calorie_estimator/features/food_analysis/domain/entities/food_analysis.dart';
 import 'package:calorie_estimator/features/food_analysis/presentation/view_models/scan_session_view_model.dart';
-import 'package:calorie_estimator/core/theme/app_icons.dart';
+import 'package:uicons/uicons.dart';
 import 'package:calorie_estimator/core/widgets/app_loader.dart';
 
 /// 07 Analysing. Starts the analysis on open and moves on to the result or
@@ -38,6 +39,12 @@ class _AnalysingViewState extends ConsumerState<AnalysingView> {
         context.pushReplacement(AppRoutes.result);
       case AnalysisOutcome.unreadablePhoto:
         context.pushReplacement(AppRoutes.analysisError);
+      case AnalysisOutcome.failed:
+        // Back to the details to try again; the reason is in a snack bar.
+        final message = ref.read(scanSessionViewModelProvider).errorMessage;
+        final messenger = ScaffoldMessenger.of(context);
+        context.pop();
+        if (message != null) showAppSnackBarOn(messenger, message);
       case AnalysisOutcome.cancelled:
         break;
     }
@@ -77,7 +84,13 @@ class _AnalysingViewState extends ConsumerState<AnalysingView> {
                       spacing: 28,
                       children: [
                         const SizedBox(height: AppSpacing.md),
-                        const _ScanningPhoto(),
+                        _ScanningPhoto(
+                          imagePath: ref.watch(
+                            scanSessionViewModelProvider.select(
+                              (s) => s.imagePath,
+                            ),
+                          ),
+                        ),
                         Semantics(
                           liveRegion: true,
                           child: Column(
@@ -119,7 +132,9 @@ class _AnalysingViewState extends ConsumerState<AnalysingView> {
 
 /// The photo with a glowing line sweeping over it.
 class _ScanningPhoto extends StatefulWidget {
-  const _ScanningPhoto();
+  const _ScanningPhoto({required this.imagePath});
+
+  final String? imagePath;
 
   @override
   State<_ScanningPhoto> createState() => _ScanningPhotoState();
@@ -144,10 +159,10 @@ class _ScanningPhotoState extends State<_ScanningPhoto>
   Widget build(BuildContext context) {
     final reduceMotion = MediaQuery.disableAnimationsOf(context);
 
-    // TODO: show the user's photo instead of the illustration.
     return SizedBox.square(
       dimension: _size,
-      child: MealPhotoPlaceholder(
+      child: MealPhoto(
+        filePath: widget.imagePath,
         plateSize: 168,
         borderRadius: BorderRadius.circular(28),
         child: AnimatedBuilder(
@@ -235,7 +250,7 @@ class _StepRow extends StatelessWidget {
           color: AppColors.primary,
           shape: BoxShape.circle,
         ),
-        child: const Icon(AppIcons.check, size: 16, color: Colors.white),
+        child: Icon(UIcons.regularRounded.check, size: 16, color: Colors.white),
       ),
       _StepStatus.active => const AppLoader(size: 28),
       _StepStatus.pending => Container(

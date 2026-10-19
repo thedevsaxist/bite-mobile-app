@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'package:material_ui/material_ui.dart';
 
 final _thousands = NumberFormat('#,##0');
 
@@ -17,6 +18,18 @@ String formatTime(DateTime time) => DateFormat.jm().format(time);
 /// `Friday, 16 Oct`.
 String formatDayHeading(DateTime date) =>
     DateFormat('EEEE, d MMM').format(date);
+
+/// `16 Oct`.
+String formatShortDate(DateTime date) => DateFormat('d MMM').format(date);
+
+/// `10–16 Oct`, `28 Sep – 4 Oct`, or `16 Oct` for a single day.
+String formatDateRange(DateTime from, DateTime to) {
+  if (DateUtils.isSameDay(from, to)) return formatShortDate(to);
+  if (from.year == to.year && from.month == to.month) {
+    return '${from.day}–${formatShortDate(to)}';
+  }
+  return '${formatShortDate(from)} – ${formatShortDate(to)}';
+}
 
 /// `CI` from `Chidiebube Iroezindu`.
 String initialsOf(String name) {

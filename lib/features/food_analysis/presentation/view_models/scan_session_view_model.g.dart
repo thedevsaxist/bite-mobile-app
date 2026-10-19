@@ -51,7 +51,7 @@ final class ScanSessionViewModelProvider
 }
 
 String _$scanSessionViewModelHash() =>
-    r'37e52827cde72b6e304af564ec075d0e60370b85';
+    r'303e9f8823c39ac5f1449ff7ec36a6da760c84f9';
 
 /// State shared by the whole scan flow: Capture → Meal details → Analysing →
 /// Result → Edit item. Kept alive across those screens; [startNewScan] resets

@@ -3,7 +3,7 @@ import 'package:material_ui/material_ui.dart';
 
 import 'package:calorie_estimator/core/theme/app_colors.dart';
 import 'package:calorie_estimator/core/theme/app_spacing.dart';
-import 'package:calorie_estimator/core/theme/app_icons.dart';
+import 'package:uicons/uicons.dart';
 
 enum AppIconButtonStyle {
   /// Light grey rounded square — the default back/close button.
@@ -30,20 +30,20 @@ class AppIconButton extends StatelessWidget {
   });
 
   /// Back chevron. Pops the current route when [onPressed] is null.
-  const AppIconButton.back({
+  AppIconButton.back({
     this.onPressed,
     this.style = AppIconButtonStyle.muted,
     this.semanticLabel = 'Back',
     super.key,
-  }) : icon = AppIcons.back;
+  }) : icon = UIcons.regularRounded.angle_small_left;
 
   /// Close cross. Pops the current route when [onPressed] is null.
-  const AppIconButton.close({
+  AppIconButton.close({
     this.onPressed,
     this.style = AppIconButtonStyle.muted,
     this.semanticLabel = 'Close',
     super.key,
-  }) : icon = AppIcons.close;
+  }) : icon = UIcons.regularRounded.cross_small;
 
   final IconData icon;
   final String semanticLabel;

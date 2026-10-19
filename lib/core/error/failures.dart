@@ -7,14 +7,31 @@ sealed class Failure {
 
   final String message;
 
+  /// The backend couldn't be reached or failed on its side, so a cached copy
+  /// is better than nothing.
+  bool get isUnreachable => switch (this) {
+    NetworkFailure() || TimeoutFailure() => true,
+    ServerFailure(:final statusCode) => statusCode != null && statusCode >= 500,
+    _ => false,
+  };
+
+  /// The backend's error code (e.g. `IMAGE_TOO_BLURRY`), when it sent one.
+  String? get code => switch (this) {
+    ServerFailure(:final code) || ValidationFailure(:final code) => code,
+    _ => null,
+  };
+
   @override
   String toString() => '$runtimeType: $message';
 }
 
 class ServerFailure extends Failure {
-  const ServerFailure(super.message, {this.statusCode});
+  const ServerFailure(super.message, {this.statusCode, this.code});
 
   final int? statusCode;
+
+  @override
+  final String? code;
 }
 
 class NetworkFailure extends Failure {
@@ -38,9 +55,21 @@ class UnauthorizedFailure extends Failure {
 /// The server rejected the input, e.g. an invalid form field or an image that
 /// failed validation.
 class ValidationFailure extends Failure {
-  const ValidationFailure(super.message, {this.fieldErrors = const {}});
+  const ValidationFailure(
+    super.message, {
+    this.fieldErrors = const {},
+    this.code,
+  });
 
   final Map<String, String> fieldErrors;
+
+  @override
+  final String? code;
+}
+
+/// The user backed out of the action. Not an error worth showing.
+class CancelledFailure extends Failure {
+  const CancelledFailure([super.message = 'Cancelled.']);
 }
 
 class CacheFailure extends Failure {

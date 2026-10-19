@@ -1,0 +1,5 @@
+// Google Sign-In for iOS: the iOS OAuth client of the Firebase project
+// bite-466bf (CLIENT_ID / REVERSED_CLIENT_ID in Runner/GoogleService-Info.plist).
+// The client ID is also in the backend's GOOGLE_CLIENT_IDS.
+GOOGLE_IOS_CLIENT_ID = 644722027095-1snu1cnmu1kjlcgcujgsdrk5qua253tn.apps.googleusercontent.com
+GOOGLE_REVERSED_CLIENT_ID = com.googleusercontent.apps.644722027095-1snu1cnmu1kjlcgcujgsdrk5qua253tn
