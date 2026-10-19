@@ -906,7 +906,8 @@ $NutrientsCopyWith<$Res>? get nutrients {
 /// @nodoc
 mixin _$MealRecord {
 
- String get id; String get analysisId; DateTime get eatenAt; MealStatus get status; bool get validatedByUser; Nutrients get totals; List<MealItem> get items;/// A signed link to the photo; only set when loading one meal.
+ String get id; String get analysisId; DateTime get eatenAt; MealStatus get status; bool get validatedByUser; Nutrients get totals; List<MealItem> get items;/// A signed link to the photo. Null with local photo storage on the
+/// backend, or when its photo store couldn't be reached.
  String? get imageUrl;
 /// Create a copy of MealRecord
 /// with the given fields replaced by the non-null parameter values.
@@ -1136,7 +1137,8 @@ class _MealRecord extends MealRecord {
   return EqualUnmodifiableListView(_items);
 }
 
-/// A signed link to the photo; only set when loading one meal.
+/// A signed link to the photo. Null with local photo storage on the
+/// backend, or when its photo store couldn't be reached.
 @override final  String? imageUrl;
 
 /// Create a copy of MealRecord

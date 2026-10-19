@@ -3,6 +3,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:calorie_estimator/core/theme/app_colors.dart';
 import 'package:calorie_estimator/core/theme/app_spacing.dart';
 import 'package:calorie_estimator/core/utils/formatters.dart';
+import 'package:calorie_estimator/core/widgets/meal_photo.dart';
 
 /// A saved meal row: name, "Lunch · 1:20 PM" and its calories.
 ///
@@ -77,6 +78,32 @@ class MealTile extends StatelessWidget {
   }
 }
 
+/// A saved meal's photo in [MealTile], with [fallback] shown while there is
+/// no photo, while it loads, or if it can't be loaded.
+class MealPhotoThumbnail extends StatelessWidget {
+  const MealPhotoThumbnail({
+    required this.url,
+    required this.fallback,
+    super.key,
+  });
+
+  final String? url;
+  final Widget fallback;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox.square(
+      dimension: MealThumbnail.size,
+      child: MealPhoto(
+        url: url,
+        plateSize: MealThumbnail.size,
+        borderRadius: BorderRadius.circular(AppRadii.sm),
+        placeholder: fallback,
+      ),
+    );
+  }
+}
+
 /// Coloured square standing in for a meal photo in [MealTile].
 class MealThumbnail extends StatelessWidget {
   const MealThumbnail({
@@ -86,6 +113,8 @@ class MealThumbnail extends StatelessWidget {
     super.key,
   });
 
+  static const size = 52.0;
+
   final Color background;
   final Color foreground;
   final bool round;
@@ -93,8 +122,8 @@ class MealThumbnail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 52,
-      height: 52,
+      width: size,
+      height: size,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: background,

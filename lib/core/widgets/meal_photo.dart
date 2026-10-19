@@ -16,6 +16,7 @@ class MealPhoto extends StatelessWidget {
     this.height,
     this.borderRadius = BorderRadius.zero,
     this.platePadding = EdgeInsets.zero,
+    this.placeholder,
     this.child,
     super.key,
   });
@@ -27,18 +28,24 @@ class MealPhoto extends StatelessWidget {
   final BorderRadius borderRadius;
   final EdgeInsets platePadding;
 
+  /// Shown instead of the plate illustration when there is no photo, while
+  /// it loads, or if it can't be loaded.
+  final Widget? placeholder;
+
   /// Overlaid on top, e.g. a "Retake" chip or scan line.
   final Widget? child;
 
   @override
   Widget build(BuildContext context) {
-    final placeholder = MealPhotoPlaceholder(
-      plateSize: plateSize,
-      height: height,
-      borderRadius: borderRadius,
-      platePadding: platePadding,
-      child: child,
-    );
+    final placeholder =
+        this.placeholder ??
+        MealPhotoPlaceholder(
+          plateSize: plateSize,
+          height: height,
+          borderRadius: borderRadius,
+          platePadding: platePadding,
+          child: child,
+        );
     final filePath = this.filePath;
     final url = this.url;
 

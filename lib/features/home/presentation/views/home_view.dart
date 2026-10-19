@@ -148,13 +148,16 @@ class _TodaysMeals extends ConsumerWidget {
             title: meal.title,
             subtitle: mealSubtitle(meal),
             calories: meal.totalCalories,
-            thumbnail: switch (_thumbnails[index % _thumbnails.length]) {
-              (final bg, final fg, final round) => MealThumbnail(
-                background: bg,
-                foreground: fg,
-                round: round,
-              ),
-            },
+            thumbnail: MealPhotoThumbnail(
+              url: meal.imageUrl,
+              fallback: switch (_thumbnails[index % _thumbnails.length]) {
+                (final bg, final fg, final round) => MealThumbnail(
+                  background: bg,
+                  foreground: fg,
+                  round: round,
+                ),
+              },
+            ),
             onTap: () {
               // The result screen shows a loader until the meal arrives.
               ref

@@ -150,7 +150,8 @@ abstract class MealRecord with _$MealRecord {
     @Default(Nutrients.zero) Nutrients totals,
     @Default([]) List<MealItem> items,
 
-    /// A signed link to the photo; only set when loading one meal.
+    /// A signed link to the photo. Null with local photo storage on the
+    /// backend, or when its photo store couldn't be reached.
     String? imageUrl,
   }) = _MealRecord;
   const MealRecord._();
